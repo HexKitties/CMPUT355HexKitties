@@ -4,9 +4,10 @@ from hexboard import HexBoard
 
 pygame.init()
 # Set up the drawing window
-screen = pygame.display.set_mode([800, 800])
+screen = pygame.display.set_mode([1000, 800])
 
-brd = HexBoard(screen, (150, 150))
+brd = HexBoard(screen, (120, 102))
+mouse_pos = (0, 0)
 
 # Run until the user asks to quit
 running = True
