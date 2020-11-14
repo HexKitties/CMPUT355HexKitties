@@ -1,35 +1,24 @@
 # Import and initialize the pygame library
 import pygame
-from hexboard import HexBoard
+
+from model import HexModel
+from controller import HexController
+from view import HexView
+import globvar
 
 pygame.init()
 # Set up the drawing window
 screen = pygame.display.set_mode([1000, 800])
 
-brd = HexBoard(screen, (120, 102))
-mouse_pos = (0, 0)
+globvar.init()
+globvar.hex_brd = HexModel()
+globvar.hex_ctrl = HexController()
+globvar.hex_view = HexView(screen, (232, 235, 239))
 
 # Run until the user asks to quit
 running = True
 while running:
-
-    # Did the user click the window close button?
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        elif event.type == pygame.MOUSEMOTION:
-            mouse_pos = pygame.mouse.get_pos()
-        if event.type == pygame.MOUSEBUTTONUP:
-            if event.button == 1:
-            	brd.place_chess()
-
-    # Fill the background with white
-    screen.fill((255, 255, 255))
-
-    # Draw hex board
-    brd.draw_board(mouse_pos)
-        
-
+    running = globvar.hex_ctrl.interaction()
     # Flip the display
     pygame.display.flip()
 
