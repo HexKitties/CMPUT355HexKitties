@@ -69,9 +69,9 @@ class HexView():
                     or (i == 0 and j == size[1] - 1) or (i == size[0] - 1 and j == 0):
                 	box_color = (0, 0, 0)
                 elif i == 0 or i == size[0] - 1:
-                    box_color = (255, 0, 0)
+                    box_color = globvar.hex_brd.players[0]
                 elif j == 0 or j == size[1] - 1:
-                    box_color = (0, 0, 255)  # blue
+                    box_color = globvar.hex_brd.players[1]
                 self.draw_ngon(radius, box_color, 6, temp_pos)
 
             d_x = sin((60 / 180) * 3.14) * radius

@@ -31,6 +31,7 @@ class HexModel():
     	if len(self.history) != 0:
     		last_pos = self.history.pop()
     		self.chess_pos[last_pos[0]][last_pos[1]] = -1
+    		self.player_turn = (self.player_turn + 1) % 2
     		return True
     	return False
 
