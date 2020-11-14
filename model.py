@@ -1,11 +1,10 @@
 import globvar
 
 class HexModel():
-    def __init__(self, radius=40, size=(8, 8), color=(128,128,128), start_pos = (120, 120)):
+    def __init__(self, radius=40, size=(8, 8), color=(128,128,128)):
         self.radius = radius
         self.size = size
         self.default_color = color
-        self.start_pos = start_pos
         self.chess_pos = self.init_board()
         self.history = []
 
@@ -25,5 +24,12 @@ class HexModel():
             return True
         return False
 
+    def undo(self):
+    	if len(self.history) != 0:
+    		last_pos = self.history.pop()
+    		self.chess_pos[last_pos[0]][last_pos[1]] = 0
+    		return True
+    	return False
+
     def notify_update(self, mouse_pos):
-        globvar.hex_view.draw_board(self.radius, self.size, self.default_color, self.chess_pos, self.start_pos, mouse_pos)
+        globvar.hex_view.display(self.radius, self.size, self.default_color, self.chess_pos, mouse_pos)

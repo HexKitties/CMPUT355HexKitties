@@ -5,6 +5,7 @@ class HexController():
     def __init__(self):
         self.mouse_pos = (-1, -1)
         self.pos_on_board = None
+        self.on_button = False
 
     def interaction(self):
     	# Did the user click the window close button?
@@ -18,5 +19,7 @@ class HexController():
                 if event.button == 1:
                     if self.pos_on_board != None:
                         globvar.hex_brd.place_chess(self.pos_on_board)
-                        globvar.hex_brd.notify_update(self.mouse_pos)
+                    if self.on_button:
+                    	globvar.hex_brd.undo()
+                    globvar.hex_brd.notify_update(self.mouse_pos)
         return True
