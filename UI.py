@@ -13,7 +13,9 @@ screen = pygame.display.set_mode([1000, 800])
 globvar.init()
 globvar.hex_brd = HexModel()
 globvar.hex_ctrl = HexController()
-globvar.hex_view = HexView(screen, (232, 235, 239))
+wood = (193, 154, 107)
+grey = (200, 200, 200)
+globvar.hex_view = HexView(screen, grey)
 
 # Run until the user asks to quit
 running = True

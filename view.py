@@ -18,12 +18,12 @@ class HexView():
               True,
               [(sin(i / n * pi2) * radius + position[0], cos(i / n * pi2) * radius + position[1]) for i in range(0, n)], 5)
 
-    def draw_circle(self, radius, pos, is_chess):
+    def draw_circle(self, radius, pos, color, is_chess):
         c_rad = int(radius * 0.6)
         if is_chess:
-            pygame.draw.circle(self.screen, (0, 0, 255), pos, c_rad)
+            pygame.draw.circle(self.screen, color, pos, c_rad)
         else:
-        	pygame.draw.circle(self.screen, (0, 0, 255), pos, c_rad, 3)
+        	pygame.draw.circle(self.screen, color, pos, c_rad, 3)
 
     def draw_button(self, mouse_pos):
         purple = (128, 0, 128)
@@ -53,24 +53,26 @@ class HexView():
 
         for i in range(size[0]):
             for j in range(size[1]):
-                color = default_color
+                box_color = default_color
                 temp_pos = (int(pos[0] + j * 2 * sin((120 / 180) * 3.14) * radius), pos[1])
-                
-                # check mouse pos in hex grid
-                if chess_pos[i][j] != 0:
-                    self.draw_circle(radius, temp_pos, True)
+
+                if chess_pos[i][j] != -1:
+                    chess_color = globvar.hex_brd.players[chess_pos[i][j]]
+                    self.draw_circle(radius, temp_pos, chess_color, True)
                 if self.check_mouse(radius, mouse_pos, temp_pos):
                     in_brd = True
-                    self.draw_circle(radius, temp_pos, False)
+                    if chess_pos[i][j] == -1:
+                        chess_color = globvar.hex_brd.players[globvar.hex_brd.player_turn]
+                        self.draw_circle(radius, temp_pos, chess_color, False)
                     globvar.hex_ctrl.pos_on_board = (i, j)
                 if (i == 0 and j == 0) or (i == size[0] - 1 and j == size[1] - 1) \
                     or (i == 0 and j == size[1] - 1) or (i == size[0] - 1 and j == 0):
-                	color = (0, 0, 0)
+                	box_color = (0, 0, 0)
                 elif i == 0 or i == size[0] - 1:
-                    color = (255, 0, 0)
+                    box_color = (255, 0, 0)
                 elif j == 0 or j == size[1] - 1:
-                    color = (0, 0, 255)  # blue
-                self.draw_ngon(radius, color, 6, temp_pos)
+                    box_color = (0, 0, 255)  # blue
+                self.draw_ngon(radius, box_color, 6, temp_pos)
 
             d_x = sin((60 / 180) * 3.14) * radius
             d_y = cos((60 / 180) * 3.14) * radius + radius
