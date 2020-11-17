@@ -25,10 +25,10 @@ class HexController():
                     if self.pos_on_board != None:
                         chess_status = globvar.hex_brd.place_chess(self.pos_on_board)
                         globvar.hex_brd.notify_update(self.mouse_pos, self.text)
-                        if chess_status == False:
+                        if chess_status == False and not self.on_button[0]:
                             self.show_message('please place chess on empty position')
                             pass
-                    else:
+                    elif not self.on_button[0]:
                         self.show_message('Do not place chess out of board')
                     if self.on_button[0]:
                         button = self.buttons[self.on_button[1]]
