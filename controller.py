@@ -20,20 +20,26 @@ class HexController():
                 if event.button == 1:
 
                     if self.pos_on_board != None:
-                        globvar.hex_brd.place_chess(self.pos_on_board)
+                        chess_status = globvar.hex_brd.place_chess(self.pos_on_board)
                         globvar.hex_brd.notify_update(self.mouse_pos)
+                        if chess_status == False:
+                            self.wrong_chess('please place chess on empty position')
+                            pass
+                    elif (self.pos_on_board) == None:
+                        self.wrong_chess('Do not place chess out of board ')
                     if self.on_button[0]:
                         button = self.buttons[self.on_button[1]]
                         if not self.press_button(button):
                             return False
                         globvar.hex_brd.notify_update(self.mouse_pos)
-                    self.wrong_chess()
+                    
         return True
 
-    def wrong_chess(self):
-        if (self.pos_on_board) == None:
+    def wrong_chess(self,text):
+
+        # if (self.pos_on_board) == None:
             # print("haha")
-            globvar.hex_brd.notify_wrongly()
+        globvar.hex_brd.notify_wrongly(text)
 
 
     def press_button(self, button):
