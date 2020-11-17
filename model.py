@@ -25,7 +25,7 @@ class HexModel():
         if self.board[chess_pos[0]][chess_pos[1]] == -1:
             self.board[chess_pos[0]][chess_pos[1]] = self.player_turn
             self.player_turn = (self.player_turn + 1) % 2
-            self.history.append(current_mouse)
+            self.history.append(chess_pos)
             return True
         return False
 
