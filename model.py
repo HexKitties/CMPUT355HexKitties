@@ -1,7 +1,7 @@
 import globvar
 
 class HexModel():
-    def __init__(self, radius=40, size=(8, 8), color=(128,128,128), players_color = ((255, 0, 0), (0, 0, 255))):
+    def __init__(self, radius=40, size=(8, 8), color=(128,128,128), players_color = ((255, 0, 0), (0, 0, 255)), mode = 0):
         self.radius = radius
         self.size = size
         self.default_color = color
@@ -9,6 +9,8 @@ class HexModel():
         self.player_turn = 0
         self.chess_pos = self.init_board()
         self.history = []
+        self.modes = {0: "REAL PLAYER", 1: "AI PLAYER"}
+        self.current_mode = mode
 
     def init_board(self):
     	empty_brd = []
@@ -26,6 +28,12 @@ class HexModel():
             self.history.append(current_mouse)
             return True
         return False
+
+    def new_game(self):
+        self.chess_pos = self.init_board()
+
+    def switch_mode(self):
+        self.current_mode = (self.current_mode + 1) % 2
 
     def undo(self):
     	if len(self.history) != 0:
