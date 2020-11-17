@@ -108,12 +108,8 @@ class HexModel():
             return True
         return False
 
-    def notify_update(self, mouse_pos):
-        globvar.hex_view.display(self.radius, self.size, self.default_color, self.board, mouse_pos)
-
-
-    def notify_wrongly(self,text):
-        globvar.hex_view.draw_wrong_notify(text)
+    def notify_update(self, mouse_pos, text):
+        globvar.hex_view.display(self.radius, self.size, self.default_color, self.board, mouse_pos, text)
 
     # Youwei continue working from JiaXin
 

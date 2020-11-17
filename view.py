@@ -99,10 +99,14 @@ class HexView():
     def check_mouse(self, radius, mouse_pos, center_pos):
     	return (mouse_pos[0]-center_pos[0])**2 + (mouse_pos[1] - center_pos[1])**2 < (radius * 0.8)**2
 
-    def display(self, radius, size, default_color, chess_pos, mouse_pos):
+    def display(self, radius, size, default_color, chess_pos, mouse_pos, text):
     	# Fill the background with white
         self.screen.fill(self.bgr_color)
         self.draw_buttons(mouse_pos)
+        #print(globvar.hex_ctrl.print_message)
+        if globvar.hex_ctrl.print_message:
+            print("here", text)
+            self.draw_wrong_notify(text)
         pos = self.start_pos
         in_brd = False
 
