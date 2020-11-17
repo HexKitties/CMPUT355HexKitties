@@ -14,7 +14,7 @@ class HexModel():
 
     def init_board(self):
     	empty_brd = []
-    	for i in range(self.size[0]):
+    	for i in range(self.size[0] ):
     		temp = []
     		for i in range(self.size[1]):
     			temp.append(-1)
@@ -45,3 +45,6 @@ class HexModel():
 
     def notify_update(self, mouse_pos):
         globvar.hex_view.display(self.radius, self.size, self.default_color, self.board, mouse_pos)
+
+    def notify_wrongly(self):
+        globvar.hex_view.draw_wrong_notify()

@@ -137,6 +137,28 @@ class HexView():
         if not in_brd:
         	globvar.hex_ctrl.pos_on_board = None
 
+    def draw_wrong_notify(self):
+        # pygame.font.init() # you have to call this at the start, 
+        #            # if you want to use this module.
+        myfont = pygame.font.SysFont('Comic Sans MS', 30)
+
+        # text = myfont.render('Do not place chess out of board ', False, (0, 0, 0))
+        text = 'Do not place chess out of board '
+        # textRect = text.get_rect()
+        # textRect.center = self.screen.center
+        # self.screen.blit(text, textRect)
+        # self.screen.blit(text)
+
+        largeText = pygame.font.Font('freesansbold.ttf',50)
+        TextSurf, TextRect = self.text_objects(text, largeText)
+        TextRect.center = ((self.size[0]/2),(self.size[1]/2))
+        self.screen.blit(TextSurf, TextRect)
+        pygame.display.update()
+        pass
+    def text_objects(self, text, font):
+        textSurface = font.render(text, True, (0,0,0))
+        return textSurface, textSurface.get_rect()
+
     # def get_pos(self, radius, size, pos, mouse_pos):
     #     for i in range(size[0]):
     #         for j in range(size[1]):

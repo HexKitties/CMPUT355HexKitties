@@ -18,6 +18,7 @@ class HexController():
                 globvar.hex_brd.notify_update(self.mouse_pos)
             if event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 1:
+
                     if self.pos_on_board != None:
                         globvar.hex_brd.place_chess(self.pos_on_board)
                         globvar.hex_brd.notify_update(self.mouse_pos)
@@ -26,7 +27,14 @@ class HexController():
                         if not self.press_button(button):
                             return False
                         globvar.hex_brd.notify_update(self.mouse_pos)
+                    self.wrong_chess()
         return True
+
+    def wrong_chess(self):
+        if (self.pos_on_board) == None:
+            # print("haha")
+            globvar.hex_brd.notify_wrongly()
+
 
     def press_button(self, button):
         if button == 0:
