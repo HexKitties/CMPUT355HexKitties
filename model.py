@@ -5,7 +5,7 @@ import monte_carlo
 
 
 class HexModel():
-    def __init__(self, radius=40, size=(4, 4), color=(128, 128, 128), players_color=((255, 0, 0), (0, 0, 255)), mode=0):
+    def __init__(self, radius=40, size=(5, 5), color=(128, 128, 128), players_color=((255, 0, 0), (0, 0, 255)), mode=0):
 
         self.radius = radius
         self.size = size

@@ -62,8 +62,6 @@ class HexController():
             return False
         elif button == 2:
             globvar.hex_brd.switch_mode()
-            globvar.hex_brd.move()
-            globvar.hex_brd.notify_update(self.mouse_pos, self.text)
         elif button == 3:
             globvar.hex_brd.undo()
         return True
