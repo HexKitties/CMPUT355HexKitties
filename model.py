@@ -4,11 +4,16 @@ class HexModel():
     def __init__(self, radius=40, size=(8, 8), color=(128,128,128), players_color = ((255, 0, 0), (0, 0, 255))):
         self.radius = radius
         self.size = size
+        self.rows = size
+        self.cols = size
         self.default_color = color
         self.players = players_color
         self.player_turn = 0
         self.chess_pos = self.init_board()
         self.history = []
+        self.PTS = '.xo'
+        self.EMPTY, BLACK, WHITE = 0, 1, 2
+        self.ECH, BCH, WCH = PTS[EMPTY], PTS[BLACK], PTS[WHITE]
 
     def init_board(self):
     	empty_brd = []
@@ -17,6 +22,8 @@ class HexModel():
     		for i in range(self.size[1]):
     			temp.append(-1)
     		empty_brd.append(temp)
+        self.R, self.C, self.n = rows, cols, rows*cols
+        self.brd = PTS[EMPTY]*self.n
     	return empty_brd
 
     def place_chess(self, current_mouse):
