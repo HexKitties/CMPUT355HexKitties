@@ -5,7 +5,7 @@ import monte_carlo
 
 
 class HexModel():
-    def __init__(self, radius=40, size=(8, 8), color=(128, 128, 128), players_color=((255, 0, 0), (0, 0, 255)), mode=0):
+    def __init__(self, radius=40, size=(4, 4), color=(128, 128, 128), players_color=((255, 0, 0), (0, 0, 255)), mode=0):
 
         self.radius = radius
         self.size = size
@@ -16,6 +16,7 @@ class HexModel():
         self.history = []
         self.modes = {0: "REAL PLAYER", 1: "AI PLAYER"}
         self.current_mode = mode
+        self.monte = monte_carlo.MonteCarlo(self)
 
         self.BTM_ROW = set()
         for x in range(self.size[1]):
@@ -61,8 +62,7 @@ class HexModel():
         return self.current_mode
 
     def move(self):
-        monte = monte_carlo.MonteCarlo(self)
-        _, next_move = monte.get_move(15)
+        _, next_move = self.monte.get_move(10)
         self.place_chess(next_move)
 
     def place_chess(self, chess_pos):
