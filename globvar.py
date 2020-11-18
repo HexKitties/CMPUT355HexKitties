@@ -1,2 +1,2 @@
 def init():
-	global hex_brd, hex_ctrl, hex_view
+    global hex_brd, hex_ctrl, hex_view

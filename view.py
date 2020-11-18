@@ -142,7 +142,7 @@ class HexView():
         	globvar.hex_ctrl.pos_on_board = None
 
     def draw_wrong_notify(self,text):
-        # pygame.font.init() # you have to call this at the start, 
+        # pygame.font.init() # you have to call this at the start,
         #            # if you want to use this module.
         myfont = pygame.font.SysFont('Comic Sans MS', 30)
 
@@ -173,4 +173,3 @@ class HexView():
     #         d_y = cos((60 / 180) * 3.14) * radius + radius
     #         pos = (int(pos[0] + d_y),\
     #          int(pos[1] + d_x))
-
