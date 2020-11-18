@@ -8,7 +8,10 @@ class HexView():
         self.bgr_color = bgr_color
         self.start_pos = start_pos
         self.size = screen.get_size()
-        self.undo_button = pygame.Rect(self.size[0] * 4 / 5, self.size[1] * 4 / 5, 150, 50)
+        self.newgame_button = pygame.Rect(self.size[0] * 1 / 6, self.size[1] * 4 / 5, 150, 50)
+        self.playermode_button = pygame.Rect(self.size[0] * 2 / 6, self.size[1] * 4 / 5, 150, 50)
+        self.undo_button = pygame.Rect(self.size[0] * 3 / 6, self.size[1] * 4 / 5, 150, 50)
+        self.exit_button = pygame.Rect(self.size[0] * 4 / 6, self.size[1] * 4 / 5, 150, 50)
 
     # https://stackoverflow.com/questions/29064259/drawing-pentagon-hexagon-in-pygame
     def draw_ngon(self, radius, color, n, position):
@@ -25,18 +28,70 @@ class HexView():
         else:
         	pygame.draw.circle(self.screen, color, pos, c_rad, 3)
 
-    def draw_button(self, mouse_pos):
+    def draw_buttons(self, mouse_pos):
+        globvar.hex_ctrl.on_button = (False, None)
+        self.draw_newgame_button(mouse_pos)
+        self.draw_exit_button(mouse_pos)
+        self.draw_playermode_button(mouse_pos)
+        self.draw_undo_button(mouse_pos)
+
+    def draw_newgame_button(self, mouse_pos):
+        purple = (128, 0, 128)
+        blue = (36, 160, 237)
+        if self.newgame_button.collidepoint(mouse_pos):
+            globvar.hex_ctrl.on_button = (True, "newgame")
+            pygame.draw.rect(self.screen, purple, self.newgame_button)
+        else:
+            pygame.draw.rect(self.screen, blue, self.newgame_button)
+
+        smallText = pygame.font.SysFont("comicsansms", 20)
+        text = smallText.render("NEW GAME", True, (255, 255, 255))
+        textRect = text.get_rect()
+        textRect.center = self.newgame_button.center
+        self.screen.blit(text, textRect)
+
+    def draw_exit_button(self, mouse_pos):
+        purple = (128, 0, 128)
+        blue = (36, 160, 237)
+        if self.exit_button.collidepoint(mouse_pos):
+            globvar.hex_ctrl.on_button = (True, "exit")
+            pygame.draw.rect(self.screen, purple, self.exit_button)
+        else:
+            pygame.draw.rect(self.screen, blue, self.exit_button)
+
+        smallText = pygame.font.SysFont("comicsansms", 20)
+        text = smallText.render("EXIT", True, (255, 255, 255))
+        textRect = text.get_rect()
+        textRect.center = self.exit_button.center
+        self.screen.blit(text, textRect)
+
+    def draw_playermode_button(self, mouse_pos):
+        purple = (128, 0, 128)
+        blue = (36, 160, 237)
+        if self.playermode_button.collidepoint(mouse_pos):
+            globvar.hex_ctrl.on_button = (True, "playermode")
+            pygame.draw.rect(self.screen, purple, self.playermode_button)
+        else:
+            pygame.draw.rect(self.screen, blue, self.playermode_button)
+
+        smallText = pygame.font.SysFont("comicsansms", 20)
+        button_text = globvar.hex_brd.modes[globvar.hex_brd.current_mode]
+        text = smallText.render(button_text, True, (255, 255, 255))
+        textRect = text.get_rect()
+        textRect.center = self.playermode_button.center
+        self.screen.blit(text, textRect)
+
+    def draw_undo_button(self, mouse_pos):
         purple = (128, 0, 128)
         blue = (36, 160, 237)
         if self.undo_button.collidepoint(mouse_pos):
-            globvar.hex_ctrl.on_button = True
+            globvar.hex_ctrl.on_button = (True, "undo")
             pygame.draw.rect(self.screen, purple, self.undo_button)
         else:
-            globvar.hex_ctrl.on_button = False
             pygame.draw.rect(self.screen, blue, self.undo_button)
 
         smallText = pygame.font.SysFont("comicsansms", 20)
-        text = smallText.render("undo", True, (255, 255, 255))
+        text = smallText.render("UNDO", True, (255, 255, 255))
         textRect = text.get_rect()
         textRect.center = self.undo_button.center
         self.screen.blit(text, textRect)
@@ -44,10 +99,14 @@ class HexView():
     def check_mouse(self, radius, mouse_pos, center_pos):
     	return (mouse_pos[0]-center_pos[0])**2 + (mouse_pos[1] - center_pos[1])**2 < (radius * 0.8)**2
 
-    def display(self, radius, size, default_color, chess_pos, mouse_pos):
+    def display(self, radius, size, default_color, chess_pos, mouse_pos, text):
     	# Fill the background with white
         self.screen.fill(self.bgr_color)
-        self.draw_button(mouse_pos)
+        self.draw_buttons(mouse_pos)
+        #print(globvar.hex_ctrl.print_message)
+        if globvar.hex_ctrl.print_message:
+            print("here", text)
+            self.draw_wrong_notify(text)
         pos = self.start_pos
         in_brd = False
 
@@ -82,6 +141,28 @@ class HexView():
         if not in_brd:
         	globvar.hex_ctrl.pos_on_board = None
 
+    def draw_wrong_notify(self,text):
+        # pygame.font.init() # you have to call this at the start,
+        #            # if you want to use this module.
+        myfont = pygame.font.SysFont('Comic Sans MS', 30)
+
+        # text = myfont.render('Do not place chess out of board ', False, (0, 0, 0))
+        # text = 'Do not place chess out of board '
+        # textRect = text.get_rect()
+        # textRect.center = self.screen.center
+        # self.screen.blit(text, textRect)
+        # self.screen.blit(text)
+
+        largeText = pygame.font.Font('freesansbold.ttf',50)
+        TextSurf, TextRect = self.text_objects(text, largeText)
+        TextRect.center = ((self.size[0]/2),(self.size[1]/2))
+        self.screen.blit(TextSurf, TextRect)
+        pygame.display.update()
+        pass
+    def text_objects(self, text, font):
+        textSurface = font.render(text, True, (0,0,0))
+        return textSurface, textSurface.get_rect()
+
     # def get_pos(self, radius, size, pos, mouse_pos):
     #     for i in range(size[0]):
     #         for j in range(size[1]):
@@ -92,4 +173,3 @@ class HexView():
     #         d_y = cos((60 / 180) * 3.14) * radius + radius
     #         pos = (int(pos[0] + d_y),\
     #          int(pos[1] + d_x))
-
