@@ -99,10 +99,14 @@ class HexView():
     def check_mouse(self, radius, mouse_pos, center_pos):
     	return (mouse_pos[0]-center_pos[0])**2 + (mouse_pos[1] - center_pos[1])**2 < (radius * 0.8)**2
 
-    def display(self, radius, size, default_color, chess_pos, mouse_pos):
+    def display(self, radius, size, default_color, chess_pos, mouse_pos, text):
     	# Fill the background with white
         self.screen.fill(self.bgr_color)
         self.draw_buttons(mouse_pos)
+        #print(globvar.hex_ctrl.print_message)
+        if globvar.hex_ctrl.print_message:
+            print("here", text)
+            self.draw_wrong_notify(text)
         pos = self.start_pos
         in_brd = False
 
@@ -137,6 +141,28 @@ class HexView():
         if not in_brd:
         	globvar.hex_ctrl.pos_on_board = None
 
+    def draw_wrong_notify(self,text):
+        # pygame.font.init() # you have to call this at the start,
+        #            # if you want to use this module.
+        myfont = pygame.font.SysFont('Comic Sans MS', 30)
+
+        # text = myfont.render('Do not place chess out of board ', False, (0, 0, 0))
+        # text = 'Do not place chess out of board '
+        # textRect = text.get_rect()
+        # textRect.center = self.screen.center
+        # self.screen.blit(text, textRect)
+        # self.screen.blit(text)
+
+        largeText = pygame.font.Font('freesansbold.ttf',50)
+        TextSurf, TextRect = self.text_objects(text, largeText)
+        TextRect.center = ((self.size[0]/2),(self.size[1]/2))
+        self.screen.blit(TextSurf, TextRect)
+        pygame.display.update()
+        pass
+    def text_objects(self, text, font):
+        textSurface = font.render(text, True, (0,0,0))
+        return textSurface, textSurface.get_rect()
+
     # def get_pos(self, radius, size, pos, mouse_pos):
     #     for i in range(size[0]):
     #         for j in range(size[1]):
@@ -147,4 +173,3 @@ class HexView():
     #         d_y = cos((60 / 180) * 3.14) * radius + radius
     #         pos = (int(pos[0] + d_y),\
     #          int(pos[1] + d_x))
-
