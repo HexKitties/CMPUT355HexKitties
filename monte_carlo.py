@@ -1,9 +1,9 @@
 import time
 from math import log, sqrt
-
 import model
 import random
 import copy
+import pickle
 
 
 class MonteCarlo():
@@ -13,6 +13,8 @@ class MonteCarlo():
         self.plays = {}
         self.wins = {}
         self.parameter = 2
+        self.dict = {"states:": none, "plays": none, "wins": none}
+
 
     def get_move(self, max_time):
         player = self.board.current_player()
@@ -91,3 +93,19 @@ class MonteCarlo():
             for j in range(len(l[0])):
                 temp += str(l[i][j])
         return temp
+
+    def dumpObjectFile(self):
+        self.dict["states"] = self.states
+        self.dict["plays"] = self.plays
+        self.dict["wins"] = self.wins
+        MonteCarlo_out = open("dict.MonteCarlo", "wb")
+        pickle.dump(self.dict, pickle_out)
+        pickle_out.close( )
+
+
+    def loadObjectFile(self):
+        MonteCarlo_in = open("dict.MonteCarlo", "rb")
+        MCDict = pickle.load(pickle_in)
+        self.dict = MCDict
+        
+

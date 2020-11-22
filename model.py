@@ -2,6 +2,7 @@ import globvar
 import copy
 from collections import deque
 import monte_carlo
+import pickle
 
 
 class HexModel():
@@ -18,6 +19,7 @@ class HexModel():
         self.history = []
         self.modes = {0: "REAL PLAYER", 1: "AI PLAYER"}
         self.current_mode = mode
+        
 
         self.BTM_ROW = set()
         for x in range(self.size[1]):
@@ -164,3 +166,5 @@ class HexModel():
                     Q.append(d)
                     seen.add(d)
         return 2
+
+    def saveObject(self):
