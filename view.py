@@ -108,7 +108,7 @@ class HexView():
             return
     	
         self.draw_buttons(mouse_pos)
-        #print(globvar.hex_ctrl.print_message)
+        
         pos = self.start_pos
         in_brd = False
 
@@ -147,14 +147,6 @@ class HexView():
         # pygame.font.init() # you have to call this at the start,
         #            # if you want to use this module.
         myfont = pygame.font.SysFont('Comic Sans MS', 30)
-
-        # text = myfont.render('Do not place chess out of board ', False, (0, 0, 0))
-        # text = 'Do not place chess out of board '
-        # textRect = text.get_rect()
-        # textRect.center = self.screen.center
-        # self.screen.blit(text, textRect)
-        # self.screen.blit(text)
-
         largeText = pygame.font.Font('freesansbold.ttf',40)
         TextSurf, TextRect = self.text_objects(text, largeText)
         TextRect.center = ((self.size[0]/2),(self.size[1]/2))
@@ -165,13 +157,3 @@ class HexView():
         textSurface = font.render(text, True, (0,0,0))
         return textSurface, textSurface.get_rect()
 
-    # def get_pos(self, radius, size, pos, mouse_pos):
-    #     for i in range(size[0]):
-    #         for j in range(size[1]):
-    #             temp_pos = (pos[0], int(pos[1] + j * 2 * sin((120 / 180) * 3.14) * radius))
-    #             if self.check_mouse(radius, mouse_pos, temp_pos):
-    #                 return (i, j)
-    #         d_x = sin((60 / 180) * 3.14) * radius
-    #         d_y = cos((60 / 180) * 3.14) * radius + radius
-    #         pos = (int(pos[0] + d_y),\
-    #          int(pos[1] + d_x))

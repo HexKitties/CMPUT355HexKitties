@@ -8,7 +8,7 @@ import os
 
 class HexModel():
 
-    def __init__(self, radius=40, size=(5, 5), color=(128, 128, 128), players_color=((255, 0, 0), (0, 0, 255)), mode=0, waiting_time=1):
+    def __init__(self, radius=40, size=(5, 5), color=(128, 128, 128), players_color=((255, 0, 0), (0, 0, 255)), mode=1, waiting_time=5):
 
         self.radius = radius
         self.size = size
@@ -25,8 +25,6 @@ class HexModel():
 
         self.monte_carlo = monte_carlo.MonteCarlo(self)
         self.load_Monte_Carlo_Obj()
-        print(self.monte_carlo.wins)
-
 
         self.BTM_ROW = set()
         for x in range(self.size[1]):
@@ -77,7 +75,7 @@ class HexModel():
 
         # monte = monte_carlo.MonteCarlo(self)
         _, next_move = self.monte_carlo.get_move(self.waiting_time)
-        print("next_move", next_move)
+        print("next_move: ", next_move)
         self.place_chess(next_move)
 
     def place_chess(self, chess_pos):
@@ -86,14 +84,6 @@ class HexModel():
 
             self.player_turn = (self.player_turn + 1) % 2
             self.history.append(chess_pos)
-            check = self.get_winner(self.board)
-            if check != 2:
-                # self.current_mode = 0
-                print("winner is", check)
-                globvar.hex_ctrl.show_message('Player'+str(self.get_winner(self.board)+1)+ ' has won')
-                # self.board = self.init_board()
-                win_path = self.winning_path(self.board, check)
-                print(win_path)
             return True
         return False
 
@@ -106,7 +96,6 @@ class HexModel():
         return ''.join([str(elem) for elem in self.board])
 
     def new_game(self):
-        print(self.current_mode)
         self.board = self.init_board()
         self.current_mode = 0
         self.player_turn = 0
@@ -256,20 +245,6 @@ class HexModel():
             MonteCarlo_in = open("dict.MonteCarlo", "rb+")
             self.monte_carlo.plays = pickle.load(MonteCarlo_in)
             self.monte_carlo.wins = pickle.load(MonteCarlo_in)
-            #self.monte_carlo = new_monte_carlo
         except:
             f = open("dict.MonteCarlo", "w+")
             f.close()
-    #     if new_monte_carlo != None:
-    #         self.monte_carlo = new_monte_carlo
-    #     import os
-
-    # scores = {} # scores is an empty dict already
-    # if os.path.getsize("dict.MonteCarlo") > 0:      
-    #     with open(target, "rb") as f:
-    #         unpickler = pickle.Unpickler(f)
-    #         # if file is not empty scores will be equal
-    #         # to the value unpickled
-    #         scores = unpickler.load()
-    #         MonteCarlo_in.close()
-

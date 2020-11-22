@@ -10,10 +10,8 @@ from collections import defaultdict
 class MonteCarlo():
     def __init__(self, board):
         self.board: model.HexModel = board
-        self.states = []
         self.plays = {}
         self.wins = {}
-
         self.parameter = 1.7
         random.seed(time.time())
 
@@ -37,13 +35,7 @@ class MonteCarlo():
              p)
             for p, s in next_states
         )
-        print(precent_wins)
-        print("states")
-        print(self.states)
-        # print("wins")
-        # print(self.wins)
-        # print("plays")
-        # print(self.plays)
+        print("winning prob: ", precent_wins)
         return precent_wins, move
 
     def run_simulation(self):

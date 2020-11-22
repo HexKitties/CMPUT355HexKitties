@@ -22,23 +22,29 @@ class HexController():
         # Did the user click the window close button?
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                # globvar.hex_brd.dump_Monte_Carlo_obj()
                 return False
             elif event.type == pygame.MOUSEMOTION:
                 self.mouse_pos = pygame.mouse.get_pos()
                 globvar.hex_brd.notify_update(self.mouse_pos, self.text)
             if event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 1:
-
                     if self.pos_on_board != None:
                         if globvar.hex_brd.get_winner(globvar.hex_brd.board) == 2:
                             chess_status = globvar.hex_brd.place_chess(self.pos_on_board)
-                            globvar.hex_brd.notify_update(self.mouse_pos, self.text)
-                            if globvar.hex_brd.current_mode == 1:  # AI player mode
-                                self.run_thread()
                             if chess_status == False and not self.on_button[0]:
                                 self.show_message('please place chess on empty position')
-                                pass
+                            else:
+                                globvar.hex_brd.notify_update(self.mouse_pos, self.text)
+                                check = globvar.hex_brd.get_winner(globvar.hex_brd.board)
+                                if check != 2:
+                                    # self.current_mode = 0
+                                    print("winner is", check)
+                                    globvar.hex_ctrl.show_message('Player '+str(check + 1)+ ' has won')
+                                    # self.board = self.init_board()
+                                    win_path = globvar.hex_brd.winning_path(globvar.hex_brd.board, check)
+                                    print("winning path is:", win_path, "\n")
+                                elif globvar.hex_brd.current_mode == 1:  # AI player mode
+                                    self.run_thread()
                         else:
                             self.show_message(
                                 'Player' + str(globvar.hex_brd.get_winner(globvar.hex_brd.board) + 1) + ' has won')
@@ -84,33 +90,35 @@ class HexController():
     def run_thread(self):
         # https://realpython.com/intro-to-python-threading/
         format = "%(asctime)s: %(message)s"
-        logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
-        logging.info("Main    : before creating thread")
+        # logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
+        # logging.info("Main    : before creating thread")
         gen_move = threading.Thread(target=self.move_thread_function, args=(1,))
         print_loading = threading.Thread(target=self.print_thread_function, args=(2,))
-        logging.info("Main    : before running thread")
+        # logging.info("Main    : before running thread")
         print_loading.start()
         gen_move.start()
-        logging.info("Main    : wait for the thread to finish")
+        # logging.info("Main    : wait for the thread to finish")
         print_loading.join()
         gen_move.join()
         pygame.event.clear()
-        logging.info("Main    : all done")
+        # logging.info("Main    : all done")
 
     def move_thread_function(self, name):
         # https://realpython.com/intro-to-python-threading/
-        logging.info("Thread %s: starting", name)
+        # logging.info("Thread %s: starting", name)
+        print("generating next move ...")
         globvar.hex_brd.move()
         globvar.hex_brd.notify_update(self.mouse_pos, self.text)
-        logging.info("Thread %s: finishing", name)
+        # logging.info("Thread %s: finishing", name)
+        print("done\n")
 
     def print_thread_function(self, name):
         # https://realpython.com/intro-to-python-threading/
-        logging.info("Thread %s: starting", name)
+        # logging.info("Thread %s: starting", name)
         waiting_time = globvar.hex_brd.waiting_time - 1
         while waiting_time > 0:
             self.show_message("loading . . . " + str(waiting_time) + "s")
             time.sleep(1)
             waiting_time -= 1
-        logging.info("Thread %s: finishing", name)
+        # logging.info("Thread %s: finishing", name)
 
