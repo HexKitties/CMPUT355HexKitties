@@ -1,9 +1,10 @@
 import time
 from math import log, sqrt
-
 import model
 import random
 import copy
+import pickle
+from collections import defaultdict
 
 
 class MonteCarlo():
@@ -12,6 +13,7 @@ class MonteCarlo():
         self.states = []
         self.plays = {}
         self.wins = {}
+
         self.parameter = 1.7
         random.seed(time.time())
 
@@ -36,6 +38,12 @@ class MonteCarlo():
             for p, s in next_states
         )
         print(precent_wins)
+        print("states")
+        print(self.states)
+        # print("wins")
+        # print(self.wins)
+        # print("plays")
+        # print(self.plays)
         return precent_wins, move
 
     def run_simulation(self):
@@ -92,3 +100,27 @@ class MonteCarlo():
             for j in range(len(l[0])):
                 temp += str(l[i][j])
         return temp
+
+    def dumpObjectFile(self):
+        # self.dict.append(["states"] self.states)
+        # self.dict["plays"] = self.plays
+        # self.dict["wins"] = self.wins
+        #d = defaultdict(list)
+        #print("dict:")
+        #print(self.dict)
+        MonteCarlo_out = open("dict.MonteCarlo", "wb")
+        pickle.dump(self, MonteCarlo_out)
+        MonteCarlo_out.close()
+
+
+    def loadObjectFile(self):
+        print("loading object!")
+        MonteCarlo_in = open("dict.MonteCarlo", "rb")
+        MCDict = pickle.load(MonteCarlo_in)
+        self.dict = MCDict
+        print("dumped wins")
+        print(self.dict["wins"])
+        
+
+        
+

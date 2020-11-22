@@ -2,13 +2,18 @@ import globvar
 import copy
 from collections import deque
 import monte_carlo
+import pickle
+import os
 
 
 class HexModel():
+
     def __init__(self, radius=40, size=(5, 5), color=(128, 128, 128), players_color=((255, 0, 0), (0, 0, 255)), mode=0):
 
         self.radius = radius
         self.size = size
+        self.rows = size
+        self.cols = size
         self.default_color = color
         self.players = players_color
         self.player_turn = 0
@@ -16,7 +21,11 @@ class HexModel():
         self.history = []
         self.modes = {0: "REAL PLAYER", 1: "AI PLAYER"}
         self.current_mode = mode
-        self.monte = monte_carlo.MonteCarlo(self)
+
+        self.monte_carlo = monte_carlo.MonteCarlo(self)
+        self.load_Monte_Carlo_Obj()
+        print(self.monte_carlo.wins)
+
 
         self.BTM_ROW = set()
         for x in range(self.size[1]):
@@ -50,41 +59,6 @@ class HexModel():
                 self.nbrs[(i, j)] = temp
 
 
-        self.BTM_ROW = set()
-        for x in range(self.size[1]):
-            self.BTM_ROW.add((self.size[1] - 1, x) )
-        self.TOP_ROW = set()
-        for x in range(self.size[1]):
-            self.TOP_ROW.add((0, x))
-        self.LFT_COL = set()
-        for x in range(self.size[0]):
-            self.LFT_COL.add((x, 0))
-        self.RGT_COL = set()
-        for x in range(self.size[0]):
-            self.RGT_COL.add((x, self.size[0] - 1))
-
-        self.nbrs = {}
-        for i in range(self.size[0]):
-            for j in range(self.size[1]):
-                temp = []
-                if i > 0:
-                    temp.append((i - 1, j))
-                if i > 0 and j < self.size[1] - 1:
-                    temp.append((i - 1, j + 1))
-                if j > 0:
-                    temp.append((i, j - 1))
-                if j < self.size[1] - 1:
-                    temp.append((i, j + 1))
-                if i < self.size[0] - 1 and j > 0:
-                    temp.append((i + 1, j - 1))
-                if i < self.size[0] - 1:
-                    temp.append((i + 1, j))
-                self.nbrs[(i, j)] = temp
-        # print(self.BTM_ROW)
-        # print(self.TOP_ROW)
-        # print(self.LFT_COL)
-        # print(self.RGT_COL)
-        # print(self.nbrs)
 
     def init_board(self):
         empty_brd = []
@@ -99,12 +73,16 @@ class HexModel():
         return self.current_mode
 
     def move(self):
-        _, next_move = self.monte.get_move(10)
+
+        # monte = monte_carlo.MonteCarlo(self)
+        _, next_move = self.monte_carlo.get_move(15)
+
         self.place_chess(next_move)
 
     def place_chess(self, chess_pos):
         if self.board[chess_pos[0]][chess_pos[1]] == -1:
             self.board[chess_pos[0]][chess_pos[1]] = self.player_turn
+
             self.player_turn = (self.player_turn + 1) % 2
             self.history.append(chess_pos)
             check = self.get_winner(self.board)
@@ -206,3 +184,26 @@ class HexModel():
                     Q.append(d)
                     seen.add(d)
         return 2
+
+    def dump_Monte_Carlo_obj(self):
+        MonteCarlo_out = open("dict.MonteCarlo", "wb")
+        pickle.dump(self.monte_carlo, MonteCarlo_out)
+        MonteCarlo_out.close()
+
+    def load_Monte_Carlo_Obj(self):
+        MonteCarlo_in = open("dict.MonteCarlo", "rb")
+        new_monte_carlo = pickle.load(MonteCarlo_in)
+        self.monte_carlo = new_monte_carlo
+    #     if new_monte_carlo != None:
+    #         self.monte_carlo = new_monte_carlo
+    #     import os
+
+    # scores = {} # scores is an empty dict already
+    # if os.path.getsize("dict.MonteCarlo") > 0:      
+    #     with open(target, "rb") as f:
+    #         unpickler = pickle.Unpickler(f)
+    #         # if file is not empty scores will be equal
+    #         # to the value unpickled
+    #         scores = unpickler.load()
+    #         MonteCarlo_in.close()
+

@@ -1,8 +1,12 @@
 import pygame
 import globvar
+
+import monte_carlo
+
 import logging
 import threading
 import time
+
 
 class HexController():
     def __init__(self):
@@ -18,6 +22,7 @@ class HexController():
         # Did the user click the window close button?
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                # globvar.hex_brd.dump_Monte_Carlo_obj()
                 return False
             elif event.type == pygame.MOUSEMOTION:
                 self.mouse_pos = pygame.mouse.get_pos()
@@ -48,7 +53,6 @@ class HexController():
         return True
 
     def show_message(self, text):
-
         # if (self.pos_on_board) == None:
         # print("haha")
         self.print_message = True

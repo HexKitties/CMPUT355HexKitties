@@ -24,6 +24,7 @@ while running:
     # Flip the display
     pygame.display.flip()
 
+globvar.hex_brd.dump_Monte_Carlo_obj()
 # Done! Time to quit.
 pygame.quit()
 
