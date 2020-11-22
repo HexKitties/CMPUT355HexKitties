@@ -8,7 +8,7 @@ import os
 
 class HexModel():
 
-    def __init__(self, radius=40, size=(5, 5), color=(128, 128, 128), players_color=((255, 0, 0), (0, 0, 255)), mode=0, waiting_time=10):
+    def __init__(self, radius=40, size=(5, 5), color=(128, 128, 128), players_color=((255, 0, 0), (0, 0, 255)), mode=0, waiting_time=1):
 
         self.radius = radius
         self.size = size
@@ -90,7 +90,10 @@ class HexModel():
             if check != 2:
                 # self.current_mode = 0
                 print("winner is", check)
+                globvar.hex_ctrl.show_message('Player'+str(self.get_winner(self.board)+1)+ ' has won')
                 # self.board = self.init_board()
+                win_path = self.winning_path(self.board, check)
+                print(win_path)
             return True
         return False
 
@@ -103,7 +106,9 @@ class HexModel():
         return ''.join([str(elem) for elem in self.board])
 
     def new_game(self):
+        print(self.current_mode)
         self.board = self.init_board()
+        self.current_mode = 0
         self.player_turn = 0
 
     def switch_mode(self):
@@ -185,6 +190,60 @@ class HexModel():
                     Q.append(d)
                     seen.add(d)
         return 2
+
+    def winning_path(self, board, winner):
+        if winner == 0:
+            set1 = copy.deepcopy(deque(self.TOP_ROW))
+            set2 = self.BTM_ROW
+        else:
+            set1 = copy.deepcopy(deque(self.LFT_COL))
+            set2 = self.RGT_COL
+        winning_path = []
+        last_one = None
+        find = False
+        Parent = dict()
+        while not find:
+            Q = deque([])
+            seen = set()
+            Parent = dict()
+            for i in set1:
+                if board[i[0]][i[1]] == winner:
+                    Q.append(i)
+                    seen.add(i)
+                    Parent[i] = i
+                    break
+            while len(Q) > 0:
+                parent = Q.pop()
+                for i in self.nbrs[parent]:
+                    if board[i[0]][i[1]] == winner and i not in seen:
+                        if i in set1:
+                            set1.remove(i)
+                        Q.append(i)
+                        seen.add(i)
+                        Parent[i] = parent
+                        if i in set2:
+                            find = True
+                            last_one = i
+                            Q = deque([])
+                            break
+        winning_path.append(last_one)
+        while Parent[last_one] != last_one:
+            last_one = Parent[last_one]
+            winning_path.append(last_one)
+
+        # simplify the path
+        if winner == 0:
+            set1 = self.TOP_ROW
+        else:
+            set1 = self.LFT_COL
+        if winning_path[1] in set1:
+            extra = winning_path[0]
+            winning_path.remove(extra)
+        if winning_path[len(winning_path)-2] in set2:
+            extra = winning_path[len(winning_path) - 1]
+            winning_path.remove(extra)
+        return winning_path
+
 
     def dump_Monte_Carlo_obj(self):
         MonteCarlo_out = open("dict.MonteCarlo", "wb")

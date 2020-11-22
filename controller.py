@@ -31,15 +31,20 @@ class HexController():
                 if event.button == 1:
 
                     if self.pos_on_board != None:
-                        chess_status = globvar.hex_brd.place_chess(self.pos_on_board)
-                        globvar.hex_brd.notify_update(self.mouse_pos, self.text)
-                        if globvar.hex_brd.current_mode == 1:  # AI player mode
-                            self.run_thread()
-                        if chess_status == False and not self.on_button[0]:
-                            self.show_message('please place chess on empty position')
-                            pass
+                        if globvar.hex_brd.get_winner(globvar.hex_brd.board) == 2:
+                            chess_status = globvar.hex_brd.place_chess(self.pos_on_board)
+                            globvar.hex_brd.notify_update(self.mouse_pos, self.text)
+                            if globvar.hex_brd.current_mode == 1:  # AI player mode
+                                self.run_thread()
+                            if chess_status == False and not self.on_button[0]:
+                                self.show_message('please place chess on empty position')
+                                pass
+                        else:
+                            self.show_message(
+                                'Player' + str(globvar.hex_brd.get_winner(globvar.hex_brd.board) + 1) + ' has won')
                     elif not self.on_button[0]:
-                        self.show_message('Do not place chess out of board')
+                        if globvar.hex_brd.get_winner(globvar.hex_brd.board) == 2:
+                            self.show_message('Do not place chess out of board')
                     if self.on_button[0]:
                         button = self.buttons[self.on_button[1]]
                         if not self.press_button(button):  # return False if quit button is pressed
@@ -69,7 +74,11 @@ class HexController():
         elif button == 2:
             globvar.hex_brd.switch_mode()
         elif button == 3:
-            globvar.hex_brd.undo()
+            if globvar.hex_brd.get_winner(globvar.hex_brd.board) == 2:
+                globvar.hex_brd.undo()
+            else:
+                self.show_message('Cannot Undo, Player'+str(globvar.hex_brd.get_winner(globvar.hex_brd.board)+1) +
+                                  ' has won')
         return True
 
     def run_thread(self):
