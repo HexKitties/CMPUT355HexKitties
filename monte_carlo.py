@@ -4,6 +4,7 @@ import model
 import random
 import copy
 import pickle
+from collections import defaultdict
 
 
 class MonteCarlo():
@@ -13,7 +14,7 @@ class MonteCarlo():
         self.plays = {}
         self.wins = {}
         self.parameter = 2
-        self.dict = {"states:": none, "plays": none, "wins": none}
+        self.dict = {}
 
 
     def get_move(self, max_time):
@@ -37,6 +38,12 @@ class MonteCarlo():
             for p, s in next_states
         )
         print(precent_wins)
+        print("states")
+        print(self.states)
+        # print("wins")
+        # print(self.wins)
+        # print("plays")
+        # print(self.plays)
         return precent_wins, move
 
     def run_simulation(self):
@@ -95,17 +102,25 @@ class MonteCarlo():
         return temp
 
     def dumpObjectFile(self):
-        self.dict["states"] = self.states
-        self.dict["plays"] = self.plays
-        self.dict["wins"] = self.wins
+        # self.dict.append(["states"] self.states)
+        # self.dict["plays"] = self.plays
+        # self.dict["wins"] = self.wins
+        #d = defaultdict(list)
+        #print("dict:")
+        #print(self.dict)
         MonteCarlo_out = open("dict.MonteCarlo", "wb")
-        pickle.dump(self.dict, pickle_out)
-        pickle_out.close( )
+        pickle.dump(self, MonteCarlo_out)
+        MonteCarlo_out.close()
 
 
     def loadObjectFile(self):
+        print("loading object!")
         MonteCarlo_in = open("dict.MonteCarlo", "rb")
-        MCDict = pickle.load(pickle_in)
+        MCDict = pickle.load(MonteCarlo_in)
         self.dict = MCDict
+        print("dumped wins")
+        print(self.dict["wins"])
+        
+
         
 

@@ -3,6 +3,7 @@ import copy
 from collections import deque
 import monte_carlo
 import pickle
+import os
 
 
 class HexModel():
@@ -19,7 +20,10 @@ class HexModel():
         self.history = []
         self.modes = {0: "REAL PLAYER", 1: "AI PLAYER"}
         self.current_mode = mode
-        
+        self.monte_carlo = monte_carlo.MonteCarlo(self)
+        self.load_Monte_Carlo_Obj()
+        print(self.monte_carlo.wins)
+
 
         self.BTM_ROW = set()
         for x in range(self.size[1]):
@@ -67,8 +71,8 @@ class HexModel():
         return self.current_mode
 
     def move(self):
-        monte = monte_carlo.MonteCarlo(self)
-        _, next_move = monte.get_move(15)
+        # monte = monte_carlo.MonteCarlo(self)
+        _, next_move = self.monte_carlo.get_move(15)
         self.place_chess(next_move)
 
     def place_chess(self, chess_pos):
@@ -166,5 +170,25 @@ class HexModel():
                     Q.append(d)
                     seen.add(d)
         return 2
+    def dump_Monte_Carlo_obj(self):
+        MonteCarlo_out = open("dict.MonteCarlo", "wb")
+        pickle.dump(self.monte_carlo, MonteCarlo_out)
+        MonteCarlo_out.close()
 
-    def saveObject(self):
+    def load_Monte_Carlo_Obj(self):
+        MonteCarlo_in = open("dict.MonteCarlo", "rb")
+        new_monte_carlo = pickle.load(MonteCarlo_in)
+        self.monte_carlo = new_monte_carlo
+    #     if new_monte_carlo != None:
+    #         self.monte_carlo = new_monte_carlo
+    #     import os
+
+    # scores = {} # scores is an empty dict already
+    # if os.path.getsize("dict.MonteCarlo") > 0:      
+    #     with open(target, "rb") as f:
+    #         unpickler = pickle.Unpickler(f)
+    #         # if file is not empty scores will be equal
+    #         # to the value unpickled
+    #         scores = unpickler.load()
+    #         MonteCarlo_in.close()
+

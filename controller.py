@@ -1,5 +1,6 @@
 import pygame
 import globvar
+import monte_carlo
 
 
 class HexController():
@@ -16,6 +17,7 @@ class HexController():
         # Did the user click the window close button?
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                # globvar.hex_brd.dump_Monte_Carlo_obj()
                 return False
             elif event.type == pygame.MOUSEMOTION:
                 self.mouse_pos = pygame.mouse.get_pos()
