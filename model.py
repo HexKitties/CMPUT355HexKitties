@@ -8,7 +8,7 @@ import os
 
 class HexModel():
 
-    def __init__(self, radius=40, size=(5, 5), color=(128, 128, 128), players_color=((255, 0, 0), (0, 0, 255)), mode=0):
+    def __init__(self, radius=40, size=(5, 5), color=(128, 128, 128), players_color=((255, 0, 0), (0, 0, 255)), mode=0, waiting_time=10):
 
         self.radius = radius
         self.size = size
@@ -21,6 +21,7 @@ class HexModel():
         self.history = []
         self.modes = {0: "REAL PLAYER", 1: "AI PLAYER"}
         self.current_mode = mode
+        self.waiting_time = waiting_time
 
         self.monte_carlo = monte_carlo.MonteCarlo(self)
         self.load_Monte_Carlo_Obj()
@@ -75,8 +76,8 @@ class HexModel():
     def move(self):
 
         # monte = monte_carlo.MonteCarlo(self)
-        _, next_move = self.monte_carlo.get_move(15)
-
+        _, next_move = self.monte_carlo.get_move(self.waiting_time)
+        print("next_move", next_move)
         self.place_chess(next_move)
 
     def place_chess(self, chess_pos):
@@ -187,13 +188,19 @@ class HexModel():
 
     def dump_Monte_Carlo_obj(self):
         MonteCarlo_out = open("dict.MonteCarlo", "wb")
-        pickle.dump(self.monte_carlo, MonteCarlo_out)
+        pickle.dump(self.monte_carlo.plays, MonteCarlo_out)
+        pickle.dump(self.monte_carlo.wins, MonteCarlo_out)
         MonteCarlo_out.close()
 
     def load_Monte_Carlo_Obj(self):
-        MonteCarlo_in = open("dict.MonteCarlo", "rb")
-        new_monte_carlo = pickle.load(MonteCarlo_in)
-        self.monte_carlo = new_monte_carlo
+        try:
+            MonteCarlo_in = open("dict.MonteCarlo", "rb+")
+            self.monte_carlo.plays = pickle.load(MonteCarlo_in)
+            self.monte_carlo.wins = pickle.load(MonteCarlo_in)
+            #self.monte_carlo = new_monte_carlo
+        except:
+            f = open("dict.MonteCarlo", "w+")
+            f.close()
     #     if new_monte_carlo != None:
     #         self.monte_carlo = new_monte_carlo
     #     import os

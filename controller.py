@@ -49,6 +49,7 @@ class HexController():
                 pygame.time.set_timer(self.STOPMSG, 0)
                 self.print_message = False
                 self.text = None
+                globvar.hex_brd.notify_update(self.mouse_pos, self.text)
 
         return True
 
@@ -84,6 +85,7 @@ class HexController():
         logging.info("Main    : wait for the thread to finish")
         print_loading.join()
         gen_move.join()
+        pygame.event.clear()
         logging.info("Main    : all done")
 
     def move_thread_function(self, name):
@@ -96,6 +98,10 @@ class HexController():
     def print_thread_function(self, name):
         # https://realpython.com/intro-to-python-threading/
         logging.info("Thread %s: starting", name)
-        self.show_message("loading . . .")
+        waiting_time = globvar.hex_brd.waiting_time - 1
+        while waiting_time > 0:
+            self.show_message("loading . . . " + str(waiting_time) + "s")
+            time.sleep(1)
+            waiting_time -= 1
         logging.info("Thread %s: finishing", name)
 
