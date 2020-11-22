@@ -13,9 +13,9 @@ class MonteCarlo():
         self.states = []
         self.plays = {}
         self.wins = {}
-        self.parameter = 2
-        self.dict = {}
 
+        self.parameter = 1.7
+        random.seed(time.time())
 
     def get_move(self, max_time):
         player = self.board.current_player()

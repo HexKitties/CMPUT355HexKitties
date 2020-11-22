@@ -7,7 +7,8 @@ import os
 
 
 class HexModel():
-    def __init__(self, radius=40, size=(4, 4), color=(128, 128, 128), players_color=((255, 0, 0), (0, 0, 255)), mode=0):
+
+    def __init__(self, radius=40, size=(5, 5), color=(128, 128, 128), players_color=((255, 0, 0), (0, 0, 255)), mode=0):
 
         self.radius = radius
         self.size = size
@@ -20,6 +21,7 @@ class HexModel():
         self.history = []
         self.modes = {0: "REAL PLAYER", 1: "AI PLAYER"}
         self.current_mode = mode
+
         self.monte_carlo = monte_carlo.MonteCarlo(self)
         self.load_Monte_Carlo_Obj()
         print(self.monte_carlo.wins)
@@ -56,7 +58,7 @@ class HexModel():
                     temp.append((i + 1, j))
                 self.nbrs[(i, j)] = temp
 
-       
+
 
     def init_board(self):
         empty_brd = []
@@ -71,8 +73,10 @@ class HexModel():
         return self.current_mode
 
     def move(self):
+
         # monte = monte_carlo.MonteCarlo(self)
         _, next_move = self.monte_carlo.get_move(15)
+
         self.place_chess(next_move)
 
     def place_chess(self, chess_pos):
@@ -81,10 +85,9 @@ class HexModel():
 
             self.player_turn = (self.player_turn + 1) % 2
             self.history.append(chess_pos)
-
             check = self.get_winner(self.board)
             if check != 2:
-                self.current_mode = 0
+                # self.current_mode = 0
                 print("winner is", check)
                 # self.board = self.init_board()
             return True
@@ -100,16 +103,27 @@ class HexModel():
 
     def new_game(self):
         self.board = self.init_board()
+        self.player_turn = 0
 
     def switch_mode(self):
         self.current_mode = (self.current_mode + 1) % 2
 
     def undo(self):
-        if len(self.history) != 0:
-            last_pos = self.history.pop()
-            self.board[last_pos[0]][last_pos[1]] = -1
-            self.player_turn = (self.player_turn + 1) % 2
-            return True
+        if self.current_mode == 0:  # real player mode
+            if len(self.history) > 0:
+                last_pos = self.history.pop()
+                self.board[last_pos[0]][last_pos[1]] = -1
+                self.player_turn = (self.player_turn + 1) % 2
+                return True
+        else:  # AI player mode
+            if len(self.history) > 1:
+                last_pos = self.history.pop()
+                self.board[last_pos[0]][last_pos[1]] = -1
+                self.player_turn = (self.player_turn + 1) % 2
+                last_pos = self.history.pop()
+                self.board[last_pos[0]][last_pos[1]] = -1
+                self.player_turn = (self.player_turn + 1) % 2
+                return True
         return False
 
     def notify_update(self, mouse_pos, text):
@@ -170,6 +184,7 @@ class HexModel():
                     Q.append(d)
                     seen.add(d)
         return 2
+
     def dump_Monte_Carlo_obj(self):
         MonteCarlo_out = open("dict.MonteCarlo", "wb")
         pickle.dump(self.monte_carlo, MonteCarlo_out)

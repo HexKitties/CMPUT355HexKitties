@@ -105,7 +105,6 @@ class HexView():
         self.draw_buttons(mouse_pos)
         #print(globvar.hex_ctrl.print_message)
         if globvar.hex_ctrl.print_message:
-            print("here", text)
             self.draw_wrong_notify(text)
         pos = self.start_pos
         in_brd = False
