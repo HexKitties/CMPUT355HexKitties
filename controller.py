@@ -68,6 +68,7 @@ class HexController():
         return True
 
     def run_thread(self):
+        # https://realpython.com/intro-to-python-threading/
         format = "%(asctime)s: %(message)s"
         logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
         logging.info("Main    : before creating thread")
@@ -82,12 +83,14 @@ class HexController():
         logging.info("Main    : all done")
 
     def move_thread_function(self, name):
+        # https://realpython.com/intro-to-python-threading/
         logging.info("Thread %s: starting", name)
         globvar.hex_brd.move()
         globvar.hex_brd.notify_update(self.mouse_pos, self.text)
         logging.info("Thread %s: finishing", name)
 
     def print_thread_function(self, name):
+        # https://realpython.com/intro-to-python-threading/
         logging.info("Thread %s: starting", name)
         self.show_message("loading . . .")
         logging.info("Thread %s: finishing", name)
