@@ -43,6 +43,9 @@ class HexController():
                                     # self.board = self.init_board()
                                     win_path = globvar.hex_brd.winning_path(globvar.hex_brd.board, check)
                                     print("winning path is:", win_path, "\n")
+                                    globvar.hex_brd.win_path = win_path
+
+
                                 elif globvar.hex_brd.current_mode == 1:  # AI player mode
                                     self.run_thread()
                         else:
@@ -75,6 +78,7 @@ class HexController():
     def press_button(self, button):
         if button == 0:
             globvar.hex_brd.new_game()
+            # globvar.hex_brd.clear_win_path()
         elif button == 1:
             return False
         elif button == 2:

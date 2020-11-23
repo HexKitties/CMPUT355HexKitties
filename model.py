@@ -22,6 +22,7 @@ class HexModel():
         self.modes = {0: "REAL PLAYER", 1: "AI PLAYER"}
         self.current_mode = mode
         self.waiting_time = waiting_time
+        self.win_path = []
 
         self.monte_carlo = monte_carlo.MonteCarlo(self)
         self.load_Monte_Carlo_Obj()
@@ -57,7 +58,10 @@ class HexModel():
                     temp.append((i + 1, j))
                 self.nbrs[(i, j)] = temp
 
-
+    def clear_win_path(self):
+        # design for new game clear path
+        self.win_path = []
+        pass
 
     def init_board(self):
         empty_brd = []
@@ -97,7 +101,8 @@ class HexModel():
 
     def new_game(self):
         self.board = self.init_board()
-        self.current_mode = 0
+        self.clear_win_path()
+        self.current_mode = 1
         self.player_turn = 0
 
     def switch_mode(self):

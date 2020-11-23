@@ -1,6 +1,7 @@
 import pygame
 from math import cos, sin
 import globvar
+import copy
 
 class HexView():
     def __init__(self, screen, bgr_color, start_pos = (120, 120)):
@@ -27,6 +28,12 @@ class HexView():
             pygame.draw.circle(self.screen, color, pos, c_rad)
         else:
         	pygame.draw.circle(self.screen, color, pos, c_rad, 3)
+
+    def draw_wining_circle(self, radius, pos, is_chess):
+        c_rad = int(radius * 0.2)
+        pygame.draw.circle(self.screen, (192, 192, 192), pos, c_rad)
+        # else:
+        #     pygame.draw.circle(self.screen, color, pos, c_rad, 3)
 
     def draw_buttons(self, mouse_pos):
         globvar.hex_ctrl.on_button = (False, None)
@@ -112,14 +119,21 @@ class HexView():
         pos = self.start_pos
         in_brd = False
 
+        # sorted win path save time
+        current_win_path = copy.deepcopy(globvar.hex_brd.win_path)
+        current_win_path.sort()
+
         for i in range(size[0]):
             for j in range(size[1]):
                 box_color = default_color
                 temp_pos = (int(pos[0] + j * 2 * sin((120 / 180) * 3.14) * radius), pos[1])
-
                 if chess_pos[i][j] != -1:
                     chess_color = globvar.hex_brd.players[chess_pos[i][j]]
                     self.draw_circle(radius, temp_pos, chess_color, True)
+
+                    if  len(current_win_path) > 0 and (i,j) == current_win_path[0]:
+                        self.draw_wining_circle(radius, temp_pos, True )
+                        current_win_path.pop(0)
                 if self.check_mouse(radius, mouse_pos, temp_pos):
                     in_brd = True
                     if chess_pos[i][j] == -1:
