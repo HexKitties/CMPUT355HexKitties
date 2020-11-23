@@ -240,14 +240,14 @@ class HexModel():
 
 
     def dump_Monte_Carlo_obj(self):
-        MonteCarlo_out = open("dict.MonteCarlo", "wb")
+        MonteCarlo_out = open("dict.MonteCarlo%s" %(self.size,), "wb")
         pickle.dump(self.monte_carlo.plays, MonteCarlo_out)
         pickle.dump(self.monte_carlo.wins, MonteCarlo_out)
         MonteCarlo_out.close()
 
     def load_Monte_Carlo_Obj(self):
         try:
-            MonteCarlo_in = open("dict.MonteCarlo", "rb+")
+            MonteCarlo_in = open("dict.MonteCarlo%s" %(self.size,), "rb+")
             self.monte_carlo.plays = pickle.load(MonteCarlo_in)
             self.monte_carlo.wins = pickle.load(MonteCarlo_in)
         except:
