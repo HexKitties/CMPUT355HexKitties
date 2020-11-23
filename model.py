@@ -102,7 +102,7 @@ class HexModel():
     def new_game(self):
         self.board = self.init_board()
         self.clear_win_path()
-        self.current_mode = 0
+        self.current_mode = 1
         self.player_turn = 0
 
     def switch_mode(self):
