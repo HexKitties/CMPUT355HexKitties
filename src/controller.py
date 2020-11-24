@@ -21,6 +21,7 @@ class HexController():
         self.menu = True
 
     def interaction(self):
+        # main interaction function
         # Did the user click the window close button?
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -36,35 +37,39 @@ class HexController():
                     if self.menu:
                         globvar.menu.draw_menu(self.mouse_pos)
                     elif self.pos_on_board != None:
-                        if globvar.hex_brd.get_winner(globvar.hex_brd.board) == 2:
+                        win_color = self.win_color()[0]
+                        if win_color == "":
+                            # nobody wins yet
                             chess_status = globvar.hex_brd.place_chess(self.pos_on_board)
                             if chess_status == False and not self.on_button[0]:
+                                # if user tring place on non empty cell
                                 self.show_message('please place chess on empty position')
                             else:
+                                # keep placed info, and check winner
                                 globvar.hex_brd.notify_update(self.mouse_pos, self.text)
-                                check = globvar.hex_brd.get_winner(globvar.hex_brd.board)
-                                if check != 2:
-                                    # self.current_mode = 0
-                                    print("winner is", check)
-                                    globvar.hex_ctrl.show_message('Player '+str(check + 1)+ ' has won')
+                                win_color,winner_num = self.win_color()
+                                if win_color != "":
+                                    # there is a winner
+                                    print("winner is", win_color)
+                                    globvar.hex_ctrl.show_message('Player '+win_color+ ' has won')
                                     # self.board = self.init_board()
-                                    win_path = globvar.hex_brd.winning_path(globvar.hex_brd.board, check)
+                                    win_path = globvar.hex_brd.winning_path(globvar.hex_brd.board, winner_num)
                                     print("winning path is:", win_path, "\n")
                                     globvar.hex_brd.win_path = win_path
                                 elif globvar.hex_brd.current_mode == 1:  # AI player mode
                                     self.run_thread()
-                                    check = globvar.hex_brd.get_winner(globvar.hex_brd.board)
-                                    if check != 2:
-                                        # self.current_mode = 0
-                                        print("winner is", check)
-                                        globvar.hex_ctrl.show_message('Player '+str(check + 1)+ ' has won')
-                                        # self.board = self.init_board()
-                                        win_path = globvar.hex_brd.winning_path(globvar.hex_brd.board, check)
+                                    win_color,winner_num = self.win_color()
+                                    if win_color != "":
+                                        # if there is a winner
+                                        print("winner is", win_color)
+                                        globvar.hex_ctrl.show_message('Player '+ win_color + ' has won')
+                                        print("winner_num ",winner_num)
+                                        win_path = globvar.hex_brd.winning_path(globvar.hex_brd.board, winner_num)
                                         print("winning path is:", win_path, "\n")
                                         globvar.hex_brd.win_path = win_path
                         else:
-                            self.show_message(
-                                'Player' + str(globvar.hex_brd.get_winner(globvar.hex_brd.board) + 1) + ' has won')
+                            # if someone won, user trying place..
+                            self.show_message( 'Player' + win_color + ' has won')
                     elif not self.on_button[0]:
                         if globvar.hex_brd.get_winner(globvar.hex_brd.board) == 2:
                             self.show_message('Do not place chess out of board')
@@ -89,9 +94,18 @@ class HexController():
 
         return True
 
+    def win_color(self):
+        # check win color
+        win_color = ""
+        winner_num = globvar.hex_brd.get_winner(globvar.hex_brd.board)
+        if (winner_num) == 1:
+            win_color = "blue"
+        elif winner_num == 0:
+            win_color = "red"
+        return win_color, winner_num
+
     def show_message(self, text):
-        # if (self.pos_on_board) == None:
-        # print("haha")
+        # design for show message
         self.print_message = True
         self.text = text
         pygame.time.set_timer(self.STOPMSG, 1000)
