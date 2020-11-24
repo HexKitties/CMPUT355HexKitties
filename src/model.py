@@ -246,16 +246,20 @@ class HexModel():
 
 
     def dump_Monte_Carlo_obj(self):
-        MonteCarlo_out = open("data\\dict.MonteCarlo%s" %(self.size,), "wb")
+        cur_path = os.path.dirname(__file__)
+        path = os.path.relpath('../data/MonteCarlo%s'%(self.size,), cur_path)
+        MonteCarlo_out = open(path, "wb")
         pickle.dump(self.monte_carlo.plays, MonteCarlo_out)
         pickle.dump(self.monte_carlo.wins, MonteCarlo_out)
         MonteCarlo_out.close()
 
     def load_Monte_Carlo_Obj(self):
+        cur_path = os.path.dirname(__file__)
+        path = os.path.relpath('../data/MonteCarlo%s'%(self.size,), cur_path)
         try:
-            MonteCarlo_in = open("data\\dict.MonteCarlo%s" %(self.size,), "rb+")
+            MonteCarlo_in = open(path, "rb+")
             self.monte_carlo.plays = pickle.load(MonteCarlo_in)
             self.monte_carlo.wins = pickle.load(MonteCarlo_in)
         except:
-            f = open("dict.MonteCarlo", "w+")
+            f = open(path, "w+")
             f.close()
