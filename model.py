@@ -23,7 +23,6 @@ class HexModel():
         self.current_mode = mode
         self.waiting_time = waiting_time
         self.win_path = []
-        self.level = 0
 
         self.monte_carlo = monte_carlo.MonteCarlo(self)
         self.load_Monte_Carlo_Obj()
@@ -103,6 +102,7 @@ class HexModel():
     def new_game(self):
         self.board = self.init_board()
         self.clear_win_path()
+        self.history = []
         self.current_mode = 1
         self.player_turn = 0
 

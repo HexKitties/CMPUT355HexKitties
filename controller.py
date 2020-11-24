@@ -15,7 +15,7 @@ class HexController():
         self.pos_on_board = None
         self.on_button = (False, None)
         self.buttons = {"newgame": 0, "menu": 1, "REAL PLAYER": 2, "AI PLAYER": 2,
-         "undo": 3, "LEVEL": 4, "SIZE": 5, "START": 6, "QUIT": 7}
+         "undo": 3, "LEVEL": 4, "SIZE": 5, "START": 6, "CONTINUE": 7, "QUIT": 8}
         self.print_message = False
         self.text = None
         self.menu = True
@@ -73,11 +73,14 @@ class HexController():
                             button = self.buttons[self.on_button[1].split(':')[0]]
                             if not self.press_button(button):  # return False if quit button is pressed
                                 return False
+                            if self.menu:
+                                globvar.menu.draw_menu(self.mouse_pos)
                         else:
                             button = self.buttons[self.on_button[1]]
                             if not self.press_button(button):  # return False if quit button is pressed
                                 return False
-                            globvar.hex_brd.notify_update(self.mouse_pos, self.text)
+                            if not self.menu:
+                                globvar.hex_brd.notify_update(self.mouse_pos, self.text)
             if event.type == self.STOPMSG:
                 pygame.time.set_timer(self.STOPMSG, 0)
                 self.print_message = False
@@ -109,10 +112,18 @@ class HexController():
                 self.show_message('Cannot Undo, Player'+str(globvar.hex_brd.get_winner(globvar.hex_brd.board)+1) +
                                   ' has won')
         elif button == 4:
-            pass
+            globvar.menu.level = (globvar.menu.level + 1) % 2
+            if globvar.menu.level == 0:
+                globvar.hex_brd.waiting_time = 1
+            else:
+                globvar.hex_brd.waiting_time = 3
         elif button == 5:
             pass
         elif button == 6:
+            self.menu = False
+            globvar.hex_brd.new_game()
+            globvar.hex_brd.notify_update(self.mouse_pos, self.text)
+        elif button == 7:
             self.menu = False
             globvar.hex_brd.notify_update(self.mouse_pos, self.text)
         else:
