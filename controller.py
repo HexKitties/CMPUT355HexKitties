@@ -14,9 +14,11 @@ class HexController():
         self.mouse_pos = (-1, -1)
         self.pos_on_board = None
         self.on_button = (False, None)
-        self.buttons = {"newgame": 0, "exit": 1, "playermode": 2, "undo": 3}
+        self.buttons = {"newgame": 0, "menu": 1, "REAL PLAYER": 2, "AI PLAYER": 2,
+         "undo": 3, "LEVEL": 4, "SIZE": 5, "START": 6, "QUIT": 7}
         self.print_message = False
         self.text = None
+        self.menu = True
 
     def interaction(self):
         # Did the user click the window close button?
@@ -25,10 +27,15 @@ class HexController():
                 return False
             elif event.type == pygame.MOUSEMOTION:
                 self.mouse_pos = pygame.mouse.get_pos()
-                globvar.hex_brd.notify_update(self.mouse_pos, self.text)
+                if self.menu:
+                    globvar.menu.draw_menu(self.mouse_pos)
+                else:
+                    globvar.hex_brd.notify_update(self.mouse_pos, self.text)
             if event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 1:
-                    if self.pos_on_board != None:
+                    if self.menu:
+                        globvar.menu.draw_menu(self.mouse_pos)
+                    elif self.pos_on_board != None:
                         if globvar.hex_brd.get_winner(globvar.hex_brd.board) == 2:
                             chess_status = globvar.hex_brd.place_chess(self.pos_on_board)
                             if chess_status == False and not self.on_button[0]:
@@ -44,10 +51,17 @@ class HexController():
                                     win_path = globvar.hex_brd.winning_path(globvar.hex_brd.board, check)
                                     print("winning path is:", win_path, "\n")
                                     globvar.hex_brd.win_path = win_path
-
-
                                 elif globvar.hex_brd.current_mode == 1:  # AI player mode
                                     self.run_thread()
+                                    check = globvar.hex_brd.get_winner(globvar.hex_brd.board)
+                                    if check != 2:
+                                        # self.current_mode = 0
+                                        print("winner is", check)
+                                        globvar.hex_ctrl.show_message('Player '+str(check + 1)+ ' has won')
+                                        # self.board = self.init_board()
+                                        win_path = globvar.hex_brd.winning_path(globvar.hex_brd.board, check)
+                                        print("winning path is:", win_path, "\n")
+                                        globvar.hex_brd.win_path = win_path
                         else:
                             self.show_message(
                                 'Player' + str(globvar.hex_brd.get_winner(globvar.hex_brd.board) + 1) + ' has won')
@@ -55,10 +69,15 @@ class HexController():
                         if globvar.hex_brd.get_winner(globvar.hex_brd.board) == 2:
                             self.show_message('Do not place chess out of board')
                     if self.on_button[0]:
-                        button = self.buttons[self.on_button[1]]
-                        if not self.press_button(button):  # return False if quit button is pressed
-                            return False
-                        globvar.hex_brd.notify_update(self.mouse_pos, self.text)
+                        if self.menu:
+                            button = self.buttons[self.on_button[1].split(':')[0]]
+                            if not self.press_button(button):  # return False if quit button is pressed
+                                return False
+                        else:
+                            button = self.buttons[self.on_button[1]]
+                            if not self.press_button(button):  # return False if quit button is pressed
+                                return False
+                            globvar.hex_brd.notify_update(self.mouse_pos, self.text)
             if event.type == self.STOPMSG:
                 pygame.time.set_timer(self.STOPMSG, 0)
                 self.print_message = False
@@ -78,9 +97,9 @@ class HexController():
     def press_button(self, button):
         if button == 0:
             globvar.hex_brd.new_game()
-            # globvar.hex_brd.clear_win_path()
         elif button == 1:
-            return False
+            self.menu = True
+            globvar.menu.draw_menu(self.mouse_pos)
         elif button == 2:
             globvar.hex_brd.switch_mode()
         elif button == 3:
@@ -89,6 +108,15 @@ class HexController():
             else:
                 self.show_message('Cannot Undo, Player'+str(globvar.hex_brd.get_winner(globvar.hex_brd.board)+1) +
                                   ' has won')
+        elif button == 4:
+            pass
+        elif button == 5:
+            pass
+        elif button == 6:
+            self.menu = False
+            globvar.hex_brd.notify_update(self.mouse_pos, self.text)
+        else:
+            return False
         return True
 
     def run_thread(self):
