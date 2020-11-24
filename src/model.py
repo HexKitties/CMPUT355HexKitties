@@ -202,12 +202,12 @@ class HexModel():
         last_one = None
         find = False
         Parent = dict()
+        seen = set()
         while not find:
             Q = deque([])
-            seen = set()
             Parent = dict()
             for i in set1:
-                if board[i[0]][i[1]] == winner:
+                if board[i[0]][i[1]] == winner and i not in seen:
                     Q.append(i)
                     seen.add(i)
                     Parent[i] = i
