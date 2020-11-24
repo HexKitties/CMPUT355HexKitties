@@ -4,6 +4,7 @@ import pygame
 from model import HexModel
 from controller import HexController
 from view import HexView
+from menu import Menu
 import globvar
 
 pygame.init()
@@ -16,6 +17,7 @@ globvar.hex_ctrl = HexController()
 wood = (193, 154, 107)
 grey = (200, 200, 200)
 globvar.hex_view = HexView(screen, grey)
+globvar.menu = Menu(screen, grey)
 
 # Run until the user asks to quit
 running = True
