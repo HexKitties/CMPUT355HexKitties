@@ -8,7 +8,7 @@ import os
 
 class HexModel():
 
-    def __init__(self, radius=40, size=(5, 5), color=(128, 128, 128), players_color=((255, 0, 0), (0, 0, 255)), mode=1, waiting_time=5):
+    def __init__(self, radius=40, size=(6, 6), color=(128, 128, 128), players_color=((255, 0, 0), (0, 0, 255)), mode=1, waiting_time=5):
 
         self.radius = radius
         self.size = size
@@ -26,6 +26,7 @@ class HexModel():
 
         self.monte_carlo = monte_carlo.MonteCarlo(self)
         self.load_Monte_Carlo_Obj()
+        # print(self.monte_carlo.wins)
 
         self.BTM_ROW = set()
         for x in range(self.size[1]):
