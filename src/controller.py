@@ -112,6 +112,7 @@ class HexController():
         globvar.hex_brd.notify_update(self.mouse_pos, text)
 
     def press_button(self, button):
+        # when user press button
         if button == 0:
             globvar.hex_brd.new_game()
         elif button == 1:
