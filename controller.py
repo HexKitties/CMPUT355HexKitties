@@ -118,7 +118,10 @@ class HexController():
             else:
                 globvar.hex_brd.waiting_time = 3
         elif button == 5:
-            pass
+            globvar.hex_brd.size = (5, 5) if globvar.hex_brd.size == (6, 6) else (6, 6)
+            globvar.hex_brd.new_game()
+            globvar.hex_brd.dump_Monte_Carlo_obj()
+            globvar.hex_brd.load_Monte_Carlo_Obj()
         elif button == 6:
             self.menu = False
             globvar.hex_brd.new_game()
