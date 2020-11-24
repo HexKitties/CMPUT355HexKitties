@@ -6,8 +6,8 @@
 
 HexKitties is a offline-storage, AI based learning , loclal  software, 
 
-  - Type some Markdown on the left
-  - See HTML in the right
+  - You can play with your friend
+  - Train hex AI
   - Magic
 
 # New Features!
