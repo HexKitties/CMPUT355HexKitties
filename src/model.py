@@ -8,7 +8,7 @@ import os
 
 class HexModel():
 
-    def __init__(self, radius=40, size=(5, 5), color=(128, 128, 128), players_color=((255, 0, 0), (0, 0, 255)), mode=1, waiting_time=5):
+    def __init__(self, radius=40, size=(5, 5), color=(128, 128, 128), players_color=((255, 0, 0), (0, 0, 255)), mode=1, waiting_time=1):
 
         self.radius = radius
         self.size = size
@@ -26,7 +26,11 @@ class HexModel():
 
         self.monte_carlo = monte_carlo.MonteCarlo(self)
         self.load_Monte_Carlo_Obj()
+        # print(self.monte_carlo.wins)
 
+        self.setup()
+
+    def setup(self):
         self.BTM_ROW = set()
         for x in range(self.size[1]):
             self.BTM_ROW.add((self.size[1] - 1, x))
@@ -101,7 +105,9 @@ class HexModel():
 
     def new_game(self):
         self.board = self.init_board()
+        self.setup()
         self.clear_win_path()
+        self.history = []
         self.current_mode = 1
         self.player_turn = 0
 
@@ -240,14 +246,14 @@ class HexModel():
 
 
     def dump_Monte_Carlo_obj(self):
-        MonteCarlo_out = open("dict.MonteCarlo%s" %(self.size,), "wb")
+        MonteCarlo_out = open("data\\dict.MonteCarlo%s" %(self.size,), "wb")
         pickle.dump(self.monte_carlo.plays, MonteCarlo_out)
         pickle.dump(self.monte_carlo.wins, MonteCarlo_out)
         MonteCarlo_out.close()
 
     def load_Monte_Carlo_Obj(self):
         try:
-            MonteCarlo_in = open("dict.MonteCarlo%s" %(self.size,), "rb+")
+            MonteCarlo_in = open("data\\dict.MonteCarlo%s" %(self.size,), "rb+")
             self.monte_carlo.plays = pickle.load(MonteCarlo_in)
             self.monte_carlo.wins = pickle.load(MonteCarlo_in)
         except:
