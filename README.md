@@ -1,6 +1,7 @@
 # CMPUT355HexKitties
 
 
+![CAt](https://user-images.githubusercontent.com/45375571/100148606-34a38c80-2e5a-11eb-9a43-e095d77f1dd6.png)
 
 
 HexKitties is a offline-storage, AI based learning , loclal  software, 
