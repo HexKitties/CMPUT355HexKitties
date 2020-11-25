@@ -9,6 +9,7 @@ HexKitties is a offline-storage, AI based learning , loclal  software,
   - You can play with your friend
   - Train hex AI and play versus our AI player trained using MCTS
   - able to export and reuse trained files 
+  - implement using Python with UI in Pygame
 
 # New Features!
 
