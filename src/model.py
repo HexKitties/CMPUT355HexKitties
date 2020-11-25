@@ -252,7 +252,9 @@ class HexModel():
         return 2
 
     def winning_path(self, board, winner):
-    # find winning path
+        '''
+        This function will take board info and winner(represent by number) to get the winner PATH ,retrun list of array contain win path
+        '''
         if winner == 0:
             set1 = copy.deepcopy(deque(self.TOP_ROW))
             set2 = self.BTM_ROW
