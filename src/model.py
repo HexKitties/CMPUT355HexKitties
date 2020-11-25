@@ -185,6 +185,7 @@ class HexModel():
             return 0
 
     def get_winner(self, board):
+        # design for getting winner, main thought from code provided by course website
         set1, set2 = (self.TOP_ROW, self.BTM_ROW)
         # print('has_win', brd, who, set1, set2)
         Q, seen = deque([]), set()
@@ -219,6 +220,7 @@ class HexModel():
         return 2
 
     def winning_path(self, board, winner):
+    # find winning path
         if winner == 0:
             set1 = copy.deepcopy(deque(self.TOP_ROW))
             set2 = self.BTM_ROW
