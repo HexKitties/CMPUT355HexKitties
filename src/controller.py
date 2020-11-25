@@ -147,7 +147,7 @@ class HexController():
             if globvar.menu.level == 0:
                 globvar.hex_brd.waiting_time = 1
             else:
-                globvar.hex_brd.waiting_time = 3
+                globvar.hex_brd.waiting_time = 10
         elif button == 5:  # SIZE (board size: 5x5 / 6x6) button
             globvar.hex_brd.size = (5, 5) if globvar.hex_brd.size == (6, 6) else (6, 6)
             globvar.hex_brd.new_game()

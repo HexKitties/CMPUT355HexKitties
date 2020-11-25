@@ -8,7 +8,7 @@ import os
 
 class HexModel():
 
-    def __init__(self, radius=40, size=(5, 5), color=(128, 128, 128), players_color=((255, 0, 0), (0, 0, 255)), mode=1, waiting_time=1):
+    def __init__(self, radius=40, size=(5, 5), color=(128, 128, 128), players_color=((255, 0, 0), (0, 0, 255)), mode=1, waiting_time=5, load=True):
 
         self.radius = radius
         self.size = size
@@ -23,6 +23,7 @@ class HexModel():
         self.current_mode = mode
         self.waiting_time = waiting_time
         self.win_path = []
+        self.load = load
 
         self.monte_carlo = monte_carlo.MonteCarlo(self)
         self.load_Monte_Carlo_Obj()
@@ -102,6 +103,7 @@ class HexModel():
         '''
         This function generate the next move
         '''
+        # print(self.waiting_time)
         _, next_move = self.monte_carlo.get_move(self.waiting_time)
         print("next_move: ", next_move)
         self.place_chess(next_move)
@@ -213,6 +215,13 @@ class HexModel():
         else:
             return 0
 
+    def opponent(self, player):
+        # return the opponent of the given player
+        if player == 1:
+            return 0
+        elif player == 0:
+            return 1
+
     def get_winner(self, board):
         '''
         This function will get the winner according to the board, return 2 if nobody win yet
@@ -253,8 +262,10 @@ class HexModel():
 
     def winning_path(self, board, winner):
         '''
-        This function will take board info and winner(represent by number) to get the winner PATH ,retrun list of array contain win path
+        This function will receive board position and winner(represent by number) to find a winning PATH ,return a
+        list of array containing a winning path
         '''
+        print(self.board)
         if winner == 0:
             set1 = copy.deepcopy(deque(self.TOP_ROW))
             set2 = self.BTM_ROW
@@ -307,31 +318,38 @@ class HexModel():
             winning_path.remove(extra)
         return winning_path
 
+    # a simple way to tell if there is a win-link for the player, which slightly reduces the search space.
+    def win_link(self, move, player, board):
+        count = 0
+        for i in self.nbrs[move]:
+            if board[i[0]][i[1]] == -1:
+                b = copy.deepcopy(board)
+                b[i[0]][i[1]] = player
+                winner = self.get_winner(b)
+                if winner != 2:
+                    count += 1
+        if count >= 2:
+            return True
+        else:
+            return False
 
     def dump_Monte_Carlo_obj(self):
-        '''
-        This function is responsible for saving the training file for the Monte Carlo class object.
-        Saved using pickle library and saving two significant attributes for the monte carlo class.
-        '''
-        cur_path = os.path.dirname(__file__)
-        path = os.path.relpath('../data/MonteCarlo%s'%(self.size,), cur_path)
-        MonteCarlo_out = open(path, "wb")
-        pickle.dump(self.monte_carlo.plays, MonteCarlo_out)
-        pickle.dump(self.monte_carlo.wins, MonteCarlo_out)
-        MonteCarlo_out.close()
+        if self.load:
+            cur_path = os.path.dirname(__file__)
+            path = os.path.relpath('../data/MonteCarlo%s'%(self.size,), cur_path)
+            MonteCarlo_out = open(path, "wb")
+            pickle.dump(self.monte_carlo.plays, MonteCarlo_out)
+            pickle.dump(self.monte_carlo.wins, MonteCarlo_out)
+            MonteCarlo_out.close()
 
     def load_Monte_Carlo_Obj(self):
-        '''
-        This function is responsible for loading the training file for initializing our Monte Carlo object
-        so that we don't have to train every time and are able to use the object we already trained.
-        load using pickle library load two significant attributes.
-        '''
-        cur_path = os.path.dirname(__file__)
-        path = os.path.relpath('../data/MonteCarlo%s'%(self.size,), cur_path)
-        try:
-            MonteCarlo_in = open(path, "rb+")
-            self.monte_carlo.plays = pickle.load(MonteCarlo_in)
-            self.monte_carlo.wins = pickle.load(MonteCarlo_in)
-        except:
-            f = open(path, "w+")
-            f.close()
+        if self.load:
+            cur_path = os.path.dirname(__file__)
+            path = os.path.relpath('../data/MonteCarlo%s'%(self.size,), cur_path)
+            try:
+                MonteCarlo_in = open(path, "rb+")
+                self.monte_carlo.plays = pickle.load(MonteCarlo_in)
+                self.monte_carlo.wins = pickle.load(MonteCarlo_in)
+            except:
+                f = open(path, "w+")
+                f.close()
