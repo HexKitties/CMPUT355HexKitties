@@ -8,7 +8,7 @@ import os
 
 class HexModel():
 
-    def __init__(self, radius=40, size=(5, 5), color=(128, 128, 128), players_color=((255, 0, 0), (0, 0, 255)), mode=1, waiting_time=5, load=True):
+    def __init__(self, radius=40, size=(5, 5), color=(128, 128, 128), players_color=((255, 0, 0), (0, 0, 255)), mode=1, waiting_time=1, load=True):
 
         self.radius = radius
         self.size = size
