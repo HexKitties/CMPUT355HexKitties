@@ -9,8 +9,10 @@ We are team "HexKitties", HexKitties is our first group project using agile deve
 HexKitties is a offline-storage, AI based learning , python based loclal hex game, 
 
   - You can play with your friend
-  - Train hex AI
-  - This is Magic~
+  - Train hex AI and play versus our AI player trained using MCTS
+  - able to export and reuse trained files 
+  - implement using Python with UI in Pygame
+
 
 # New Features!
 
