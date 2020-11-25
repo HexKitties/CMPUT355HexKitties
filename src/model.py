@@ -309,6 +309,10 @@ class HexModel():
 
 
     def dump_Monte_Carlo_obj(self):
+        '''
+        This function is responsible for saving the training file for the Monte Carlo class object.
+        Saved using pickle library and saving two significant attributes for the monte carlo class.
+        '''
         cur_path = os.path.dirname(__file__)
         path = os.path.relpath('../data/MonteCarlo%s'%(self.size,), cur_path)
         MonteCarlo_out = open(path, "wb")
@@ -317,6 +321,11 @@ class HexModel():
         MonteCarlo_out.close()
 
     def load_Monte_Carlo_Obj(self):
+        '''
+        This function is responsible for loading the training file for initializing our Monte Carlo object
+        so that we don't have to train every time and are able to use the object we already trained.
+        load using pickle library load two significant attributes.
+        '''
         cur_path = os.path.dirname(__file__)
         path = os.path.relpath('../data/MonteCarlo%s'%(self.size,), cur_path)
         try:
