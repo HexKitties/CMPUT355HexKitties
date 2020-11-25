@@ -38,6 +38,9 @@ class ModelTest(HexModel):
 
 if __name__ == '__main__':
     iterations = 10
+    '''
+    random versus monte carlo
+    '''
     # test = ModelTest(player={0: "random", 1: "mc"})
     # count = 0
     # for i in range(iterations):
@@ -47,11 +50,15 @@ if __name__ == '__main__':
     #         count += 1
     # print(count/100)
 
+    '''
+    # monte carlo versus monte carlo
+    '''
     count = 0
     test2 = ModelTest(player={0: "mc", 1: "mc"})
     probability2 = {i: [0, 0] for i in range(test2.rows[0] * test2.rows[0] + 1)}
     for i in range(iterations):
         p2, winner = test2.simulate()
+        print("iteration " + str(i) + " winner is:", winner)
         if winner == 0:
             count += 1
         for item in p2.keys():
