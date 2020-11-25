@@ -1,16 +1,17 @@
 # CMPUT355HexKitties
 
 
-![CAt](https://user-images.githubusercontent.com/45375571/100148606-34a38c80-2e5a-11eb-9a43-e095d77f1dd6.png)
-
-We are team "HexKitties", HexKitties is our first group project using agile development method.
+![logo](https://user-images.githubusercontent.com/45375571/100290666-22e4e680-2f39-11eb-945a-d30507e0de46.jpg)
 
 
-HexKitties is a offline-storage, AI based learning , python based loclal hex game, 
+We are team "HexKitties," HexKitties is our first group project using the agile development method.
+
+
+HexKitties is an offline-storage, AI-based learning, python-based local hex game, 
 
   - You can play with your friend
   - Train hex AI and play versus our AI player trained using MCTS
-  - able to export and reuse trained files 
+  - able to export and reuse prepared files 
   - implement using Python with UI in Pygame
 
 
@@ -18,13 +19,13 @@ HexKitties is a offline-storage, AI based learning , python based loclal hex gam
 
 ### Tech
 
-HexKitties uses a number of open source projects to work properly, we have reference on the end
-Our key algorithms are Mini max tree and MonteCarlo tree search
+HexKitties uses several open-source projects to work properly; we have the reference on the end
+Our key algorithms are Mini max tree and Monte-Carlo tree search
 
-### hex game introduction and background
+### Hex game introduction and background
 http://www.mseymour.ca/hex_book/hexstrat.html
 
-### HeadPhoto
+### Logo photo
 HexKitties' cute photo, drew Yuko Shimizu, used for our non-business purpose project.
 
 ### Installation
@@ -41,11 +42,11 @@ $ python3 main.py
 ### Development
 
 Want to contribute? Great!
-Feel free to contact us, we are happy for helping future maintaines and developing more feature.
+Feel free to contact us; we are happy to help future maintains and developing more features.
 
 Make a change in your file and instantaneously see your updates!
 
-Go to src dicrectory, then open your favorite Terminal and run these commands.
+Go to src directory, then open your favourite Terminal and run these commands.
 
 First Tab:
 ```sh
