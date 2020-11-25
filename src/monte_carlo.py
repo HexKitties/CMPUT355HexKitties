@@ -88,6 +88,11 @@ class MonteCarlo():
             visited.append((player, self.list_to_str(state)))
             player = self.board.last_player(state)
             winner = self.board.get_winner(state)
+
+            # game ends if there is a simple win_link
+            if self.board.win_link(move, self.board.last_player(state), state):
+                break
+
             # game ends when a play wins
             if winner != 2:
                 break
@@ -107,6 +112,9 @@ class MonteCarlo():
             for j in range(len(l[0])):
                 temp += str(l[i][j])
         return temp
+
+
+
         
 
         
