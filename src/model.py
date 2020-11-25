@@ -131,6 +131,10 @@ class HexModel():
         return ''.join([str(elem) for elem in self.board])
 
     def new_game(self):
+        '''
+        This function will create a new game, or reset the attributes of the hex board,
+        for example clearing the board, history, winning path, and setup the other settings.
+        '''
         self.board = self.init_board()
         self.setup()
         self.clear_win_path()
@@ -139,9 +143,23 @@ class HexModel():
         self.player_turn = 0
 
     def switch_mode(self):
+        '''
+        This function will change the mode:
+        REAL PLAYER --> AI PLAYER
+        or
+        AI PLAYER ---> REAL PLAYER
+        '''
         self.current_mode = (self.current_mode + 1) % 2
 
     def undo(self):
+        '''
+        This function will delete the last chess placed on the board if the current
+        mode is REAL PLAYER mode, or, it will delete the last two chess placed on the
+        board so that the last chess placed by the user and the program are both removed
+        from the history list.
+
+        return True if successfully undo. False if failed.
+        '''
         if self.current_mode == 0:  # real player mode
             if len(self.history) > 0:
                 last_pos = self.history.pop()
@@ -160,6 +178,11 @@ class HexModel():
         return False
 
     def notify_update(self, mouse_pos, text):
+        '''
+        This function will update the screen by passing all the required values
+        to the view as parameter. By calling this function, the view will show the latest
+        board, buttons, or messages.
+        '''
         globvar.hex_view.display(self.radius, self.size, self.default_color, self.board, mouse_pos, text)
 
     def legal_moves(self, board):
@@ -171,6 +194,11 @@ class HexModel():
         return temp
 
     def current_player(self):
+        '''
+        This function return the turn of current player:
+        return 0 (first player: red by default)
+               1 (second player: blue by default)
+        '''
         return self.player_turn
 
     def last_player(self, board):  # the player that last moved, assume 0 moves first
