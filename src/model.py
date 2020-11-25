@@ -31,6 +31,12 @@ class HexModel():
         self.setup()
 
     def setup(self):
+        '''
+        This function will calculate the set of coordinates eg. (0, 0) for the boundaries,
+        which are the top and bottom rows, rightmost and leftmost columns. It will also
+        setup a dictionary that stores all the neighboring coordinates. Both of these
+        attributes are helpful for checking winning state and looking for winning path.
+        '''
         self.BTM_ROW = set()
         for x in range(self.size[1]):
             self.BTM_ROW.add((self.size[1] - 1, x))
@@ -68,6 +74,14 @@ class HexModel():
         pass
 
     def init_board(self):
+        '''
+        This function will create the corresponding hex board using the size attirbute
+        of the class object. The board is initiated with -1 for all positions in the
+        board. Note that -1 represents empty position, 0 and 1 represent the first or
+        second player's chess on that position.
+
+        return empty_brd: a 2D list with all position initiated as value -1
+        '''
         empty_brd = []
         for i in range(self.size[0]):
             temp = []
@@ -77,6 +91,11 @@ class HexModel():
         return empty_brd
 
     def get_current_mode(self):
+        '''
+        This function returns the current playing mode (REAL PLAYER or AI PLAYER).
+
+        return self.current_mode: either 0 (REAL PLAYER) or 1 (AI PLAYER)
+        '''
         return self.current_mode
 
     def move(self):
@@ -87,7 +106,15 @@ class HexModel():
         self.place_chess(next_move)
 
     def place_chess(self, chess_pos):
-        if self.board[chess_pos[0]][chess_pos[1]] == -1:
+        '''
+        This function will take the chess_pos as argument and add it in to the current
+        chess board board. If the position of the new chess is empty, then it will be
+        added successfully and return True where the chess position will be added into the history for
+        undo functionality. Otherwise, chess will not be added and it will return False.
+
+        return True or False
+        '''
+        if self.board[chess_pos[0]][chess_pos[1]] == -1:  # chess position is empty
             self.board[chess_pos[0]][chess_pos[1]] = self.player_turn
 
             self.player_turn = (self.player_turn + 1) % 2
