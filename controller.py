@@ -30,7 +30,7 @@ class HexController():
                 if event.button == 1:
                     if self.pos_on_board != None:
                         if globvar.hex_brd.get_winner(globvar.hex_brd.board) == 2:
-                            chess_status = globvar.hex_brd.place_chess(self.pos_on_board)
+                            chess_status,winner = globvar.hex_brd.place_chess(self.pos_on_board)
                             if chess_status == False and not self.on_button[0]:
                                 self.show_message('please place chess on empty position')
                             else:
@@ -39,10 +39,13 @@ class HexController():
                                 if check != 2:
                                     # self.current_mode = 0
                                     print("winner is", check)
-                                    globvar.hex_ctrl.show_message('Player '+str(check + 1)+ ' has won')
+                                    globvar.hex_ctrl.show_message('Player '+str(check + 1) + ' has won',)
                                     # self.board = self.init_board()
                                     win_path = globvar.hex_brd.winning_path(globvar.hex_brd.board, check)
                                     print("winning path is:", win_path, "\n")
+                                    globvar.hex_brd.win_path = win_path
+
+
                                 elif globvar.hex_brd.current_mode == 1:  # AI player mode
                                     self.run_thread()
                         else:
@@ -75,6 +78,7 @@ class HexController():
     def press_button(self, button):
         if button == 0:
             globvar.hex_brd.new_game()
+            # globvar.hex_brd.clear_win_path()
         elif button == 1:
             return False
         elif button == 2:

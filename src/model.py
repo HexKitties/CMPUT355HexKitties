@@ -8,7 +8,7 @@ import os
 
 class HexModel():
 
-    def __init__(self, radius=40, size=(5, 5), color=(128, 128, 128), players_color=((255, 0, 0), (0, 0, 255)), mode=1, waiting_time=5):
+    def __init__(self, radius=40, size=(5, 5), color=(128, 128, 128), players_color=((255, 0, 0), (0, 0, 255)), mode=1, waiting_time=1):
 
         self.radius = radius
         self.size = size
@@ -26,7 +26,11 @@ class HexModel():
 
         self.monte_carlo = monte_carlo.MonteCarlo(self)
         self.load_Monte_Carlo_Obj()
+        # print(self.monte_carlo.wins)
 
+        self.setup()
+
+    def setup(self):
         self.BTM_ROW = set()
         for x in range(self.size[1]):
             self.BTM_ROW.add((self.size[1] - 1, x))
@@ -88,9 +92,8 @@ class HexModel():
 
             self.player_turn = (self.player_turn + 1) % 2
             self.history.append(chess_pos)
-            winner = self.get_winner(globvar.hex_brd.board)
-            return True, winner
-        return False, winner
+            return True
+        return False
 
     def place_chess2(self, chess_pos, board):
         player = (self.last_player(board) + 1) % 2
@@ -102,7 +105,9 @@ class HexModel():
 
     def new_game(self):
         self.board = self.init_board()
+        self.setup()
         self.clear_win_path()
+        self.history = []
         self.current_mode = 1
         self.player_turn = 0
 
@@ -153,6 +158,7 @@ class HexModel():
             return 0
 
     def get_winner(self, board):
+        # design for getting winner, main thought from code provided by course website
         set1, set2 = (self.TOP_ROW, self.BTM_ROW)
         # print('has_win', brd, who, set1, set2)
         Q, seen = deque([]), set()
@@ -187,6 +193,7 @@ class HexModel():
         return 2
 
     def winning_path(self, board, winner):
+    # find winning path
         if winner == 0:
             set1 = copy.deepcopy(deque(self.TOP_ROW))
             set2 = self.BTM_ROW
@@ -241,14 +248,14 @@ class HexModel():
 
 
     def dump_Monte_Carlo_obj(self):
-        MonteCarlo_out = open("dict.MonteCarlo", "wb")
+        MonteCarlo_out = open("data\\dict.MonteCarlo%s" %(self.size,), "wb")
         pickle.dump(self.monte_carlo.plays, MonteCarlo_out)
         pickle.dump(self.monte_carlo.wins, MonteCarlo_out)
         MonteCarlo_out.close()
 
     def load_Monte_Carlo_Obj(self):
         try:
-            MonteCarlo_in = open("dict.MonteCarlo", "rb+")
+            MonteCarlo_in = open("data\\dict.MonteCarlo%s" %(self.size,), "rb+")
             self.monte_carlo.plays = pickle.load(MonteCarlo_in)
             self.monte_carlo.wins = pickle.load(MonteCarlo_in)
         except:
