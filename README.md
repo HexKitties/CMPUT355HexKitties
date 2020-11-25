@@ -25,7 +25,7 @@ Our key algorithms are Mini max tree and MonteCarlo tree search
 http://www.mseymour.ca/hex_book/hexstrat.html
 
 ### HeadPhoto
-HexKitties' cute photo , drawed by Youwei(Daivd) , used for project, feel free to copy and use
+HexKitties' cute photo, drew Yuko Shimizu, used for our non-business purpose project.
 
 ### Installation
 
