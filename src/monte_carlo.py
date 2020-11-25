@@ -6,7 +6,11 @@ import copy
 import pickle
 from collections import defaultdict
 
-
+'''
+main algorithm using MonteCarlo tree search
+Refference:
+http://jeffbradberry.com/posts/2015/09/intro-to-monte-carlo-tree-search/
+'''
 class MonteCarlo():
     def __init__(self, board):
         self.board: model.HexModel = board

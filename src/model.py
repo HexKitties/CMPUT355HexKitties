@@ -99,8 +99,9 @@ class HexModel():
         return self.current_mode
 
     def move(self):
-
-        # monte = monte_carlo.MonteCarlo(self)
+        '''
+        This function generate the next move
+        '''
         _, next_move = self.monte_carlo.get_move(self.waiting_time)
         print("next_move: ", next_move)
         self.place_chess(next_move)
@@ -213,9 +214,13 @@ class HexModel():
             return 0
 
     def get_winner(self, board):
-        # design for getting winner, main thought from code provided by course website
+        '''
+        This function will get the winner according to the board, return 2 if nobody win yet
+        the arugment board is the object current runing board, the array
+        return 0, 1 represent the player number
+        '''
+        # design for getting winner, main thought/algorithm from code provided by course website, but written by ourself
         set1, set2 = (self.TOP_ROW, self.BTM_ROW)
-        # print('has_win', brd, who, set1, set2)
         Q, seen = deque([]), set()
         for c in set1:
             if board[c[0]][c[1]] == 0:
@@ -231,7 +236,6 @@ class HexModel():
                     seen.add(d)
 
         set1, set2 = (self.LFT_COL, self.RGT_COL)
-        # print('has_win', brd, who, set1, set2)
         Q, seen = deque([]), set()
         for c in set1:
             if board[c[0]][c[1]] == 1:

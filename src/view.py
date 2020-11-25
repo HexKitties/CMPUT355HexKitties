@@ -40,10 +40,14 @@ class HexView():
         	pygame.draw.circle(self.screen, color, pos, c_rad, 3)
 
     def draw_wining_circle(self, radius, pos, is_chess):
+        '''
+        This functino draw a circle for the given position and radius. It will draw a circle
+        filled with white color if it is a chess , or just the perimeter of the circle if it is not
+        a chess (to show the user's mouse on the board). design for showwing wining path
+        '''
         c_rad = int(radius * 0.2)
         pygame.draw.circle(self.screen, (192, 192, 192), pos, c_rad)
-        # else:
-        #     pygame.draw.circle(self.screen, color, pos, c_rad, 3)
+
 
     def draw_buttons(self, mouse_pos):
         '''
@@ -86,10 +90,9 @@ class HexView():
         This function calculate the distance between the mouse pos and the given circle's center
         point and radius, and then determine if it is in the circle
 
-        return True if the mouse is in the circle
-               False if the mouse is not in the circle
+        return True if the mouse is in the circle False if the mouse is not in the circle
         '''
-    	return (mouse_pos[0]-center_pos[0])**2 + (mouse_pos[1] - center_pos[1])**2 < (radius * 0.8)**2
+        return (mouse_pos[0]-center_pos[0])**2 + (mouse_pos[1] - center_pos[1])**2 < (radius * 0.8)**2
 
     def display(self, radius, size, default_color, chess_pos, mouse_pos, text):
         '''
@@ -108,7 +111,7 @@ class HexView():
         if globvar.hex_ctrl.print_message:
             self.draw_notify(text)
             return
-    	
+
         self.draw_buttons(mouse_pos)
         
         pos = self.start_pos
