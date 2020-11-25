@@ -5,17 +5,22 @@ import copy
 
 class HexView():
     def __init__(self, screen, bgr_color, start_pos = (120, 120)):
+        # setup attributes of the display
         self.screen = screen
         self.bgr_color = bgr_color
         self.start_pos = start_pos
         self.size = screen.get_size()
+        # setup button's size and location
         self.newgame_button = pygame.Rect(self.size[0] * 1 / 6, self.size[1] * 4 / 5, 150, 50)
         self.playermode_button = pygame.Rect(self.size[0] * 2 / 6, self.size[1] * 4 / 5, 150, 50)
         self.undo_button = pygame.Rect(self.size[0] * 3 / 6, self.size[1] * 4 / 5, 150, 50)
         self.menu_button = pygame.Rect(self.size[0] * 4 / 6, self.size[1] * 4 / 5, 150, 50)
 
-    # https://stackoverflow.com/questions/29064259/drawing-pentagon-hexagon-in-pygame
     def draw_ngon(self, radius, color, n, position):
+        '''
+        This function draws a hexagon for the given position and radius. This code is obtained
+        from: https://stackoverflow.com/questions/29064259/drawing-pentagon-hexagon-in-pygame
+        '''
         pi2 = 2 * 3.14
         return pygame.draw.lines(self.screen,
               color,
@@ -23,6 +28,11 @@ class HexView():
               [(sin(i / n * pi2) * radius + position[0], cos(i / n * pi2) * radius + position[1]) for i in range(0, n)], 5)
 
     def draw_circle(self, radius, pos, color, is_chess):
+        '''
+        This functino draw a circle for the given position and radius. It will draw a circle
+        filled with color if it is a chess, or just the perimeter of the circle if it is not
+        a chess (to show the user's mouse on the board).
+        '''
         c_rad = int(radius * 0.6)
         if is_chess:
             pygame.draw.circle(self.screen, color, pos, c_rad)
@@ -36,6 +46,15 @@ class HexView():
         #     pygame.draw.circle(self.screen, color, pos, c_rad, 3)
 
     def draw_buttons(self, mouse_pos):
+        '''
+        This function will call the draw_button function to draw the four buttons:
+            (i) new game
+            (ii) player mode
+            (iii) undo
+            (iv) menu
+        It initialize the on_button variable as (False, None) which is used in the controller
+        to determine whether or not the user's mouse is on the button, and on which button.
+        '''
         globvar.hex_ctrl.on_button = (False, None)
         self.draw_button(mouse_pos, self.newgame_button, "newgame")
         self.draw_button(mouse_pos, self.menu_button, "menu")
@@ -43,6 +62,11 @@ class HexView():
         self.draw_button(mouse_pos, self.undo_button, "undo")
 
     def draw_button(self, mouse_pos, button, text):
+        '''
+        This function will draw the corresponding button given the button size and pos as an
+        pygame Rect object with the given text passed in. It will also set the contrller's 
+        on_button variable to True and the button's text if the mouse is on the button.
+        '''
         purple = (128, 0, 128)
         blue = (36, 160, 237)
         if button.collidepoint(mouse_pos):
@@ -58,9 +82,26 @@ class HexView():
         self.screen.blit(text, textRect)
 
     def check_mouse(self, radius, mouse_pos, center_pos):
+        '''
+        This function calculate the distance between the mouse pos and the given circle's center
+        point and radius, and then determine if it is in the circle
+
+        return True if the mouse is in the circle
+               False if the mouse is not in the circle
+        '''
     	return (mouse_pos[0]-center_pos[0])**2 + (mouse_pos[1] - center_pos[1])**2 < (radius * 0.8)**2
 
     def display(self, radius, size, default_color, chess_pos, mouse_pos, text):
+        '''
+        This is the main function that will draw the buttons, hex board or messages on the screen.
+        It will first check if there is any message needed to be printed, if yes, it will only
+        prints the message and return.
+        Then, it will call the draw_buttons method to draw all the buttons.
+        After that, it will start drawing the hex board by calling the helper functions:
+            draw_circle: draw the chess or current mouse on board
+            draw_winningcircle: small grey circle to illustrate winning path
+            draw_bgon: for each cell on the board
+        '''
         # Fill the background with white
         self.screen.fill(self.bgr_color)
 
