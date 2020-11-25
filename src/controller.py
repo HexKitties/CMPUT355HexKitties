@@ -21,7 +21,11 @@ class HexController():
         self.menu = True
 
     def interaction(self):
-        # main interaction function
+        '''
+        This function is the main interaction function, will always return true, unless user
+        click quit button, then game will end in the main.py
+        '''
+
         # Did the user click the window close button?
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -95,7 +99,10 @@ class HexController():
         return True
 
     def win_color(self):
-        # check win color
+        '''
+        This function  will check win color, according to the winer number,
+        return winner's color 
+        '''
         win_color = ""
         winner_num = globvar.hex_brd.get_winner(globvar.hex_brd.board)
         if (winner_num) == 1:
@@ -105,6 +112,10 @@ class HexController():
         return win_color, winner_num
 
     def show_message(self, text):
+        '''
+        This function  will call model to update, and message will lasting for a while
+        arguement text is the message want to be showed
+        '''
         # design for show message
         self.print_message = True
         self.text = text
