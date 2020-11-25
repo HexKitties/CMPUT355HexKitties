@@ -69,7 +69,7 @@ class HexController():
                                         globvar.hex_brd.win_path = win_path
                         else:
                             # if someone won, user trying place..
-                            self.show_message( 'Player' + win_color + ' has won')
+                            self.show_message( 'Player ' + win_color + ' has won')
                     elif not self.on_button[0]:
                         if globvar.hex_brd.get_winner(globvar.hex_brd.board) == 2:
                             self.show_message('Do not place chess out of board')
@@ -112,73 +112,84 @@ class HexController():
         globvar.hex_brd.notify_update(self.mouse_pos, text)
 
     def press_button(self, button):
-        if button == 0:
+        '''
+        This function will handle the procedure of pressing a button.
+        
+        return True if not the quit button is pressed
+               False if quit button is pressed
+        '''
+        if button == 0:  # new game button
             globvar.hex_brd.new_game()
-        elif button == 1:
+        elif button == 1:  # menu button
             self.menu = True
             globvar.menu.draw_menu(self.mouse_pos)
-        elif button == 2:
+        elif button == 2:  # REAL PLAYER / AI PLAYER mode button
             globvar.hex_brd.switch_mode()
-        elif button == 3:
+        elif button == 3:  # undo button
             if globvar.hex_brd.get_winner(globvar.hex_brd.board) == 2:
                 globvar.hex_brd.undo()
             else:
                 self.show_message('Cannot Undo, Player'+str(globvar.hex_brd.get_winner(globvar.hex_brd.board)+1) +
                                   ' has won')
-        elif button == 4:
+        elif button == 4:  # LEVEL  (EASY / HARD) button
             globvar.menu.level = (globvar.menu.level + 1) % 2
             if globvar.menu.level == 0:
                 globvar.hex_brd.waiting_time = 1
             else:
                 globvar.hex_brd.waiting_time = 3
-        elif button == 5:
+        elif button == 5:  # SIZE (board size: 5x5 / 6x6) button
             globvar.hex_brd.size = (5, 5) if globvar.hex_brd.size == (6, 6) else (6, 6)
             globvar.hex_brd.new_game()
             globvar.hex_brd.dump_Monte_Carlo_obj()
             globvar.hex_brd.load_Monte_Carlo_Obj()
-        elif button == 6:
+        elif button == 6:  # START (new game) button
             self.menu = False
             globvar.hex_brd.new_game()
             globvar.hex_brd.notify_update(self.mouse_pos, self.text)
-        elif button == 7:
+        elif button == 7:  # CONTINUE (previous game) button
             self.menu = False
             globvar.hex_brd.notify_update(self.mouse_pos, self.text)
-        else:
+        else:  # QUIT button
             return False
         return True
 
     def run_thread(self):
+        '''
+        This function will run two thread:
+            Thread 1: Monte Carlo algorithm move generation process
+            Thread 2: Count down message display
+        to avoid having the user stuck in the middle of the program without knowing
+        what is going on.
+        '''
         # https://realpython.com/intro-to-python-threading/
-        format = "%(asctime)s: %(message)s"
-        # logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
-        # logging.info("Main    : before creating thread")
         gen_move = threading.Thread(target=self.move_thread_function, args=(1,))
         print_loading = threading.Thread(target=self.print_thread_function, args=(2,))
-        # logging.info("Main    : before running thread")
         print_loading.start()
         gen_move.start()
-        # logging.info("Main    : wait for the thread to finish")
         print_loading.join()
         gen_move.join()
         pygame.event.clear()
-        # logging.info("Main    : all done")
 
     def move_thread_function(self, name):
-        # https://realpython.com/intro-to-python-threading/
-        # logging.info("Thread %s: starting", name)
+        '''
+        This function is the process of the first thread. It will call the move function to
+        generate a move for the current board using Monte Carlo algorithm.
+        '''
         print("generating next move ...")
         globvar.hex_brd.move()
         globvar.hex_brd.notify_update(self.mouse_pos, self.text)
-        # logging.info("Thread %s: finishing", name)
         print("done\n")
 
     def print_thread_function(self, name):
-        # https://realpython.com/intro-to-python-threading/
-        # logging.info("Thread %s: starting", name)
+        '''
+        This functino is the process of the second thread. It will show the
+        count down message:  loading ... X sec
+        where X is the number of seconds left for waiting. The waiting time depends on
+        the current level (1 sec if in EASY mode, 3 sec if in HARD mode).
+        '''
         waiting_time = globvar.hex_brd.waiting_time - 1
         while waiting_time > 0:
             self.show_message("loading . . . " + str(waiting_time) + "s")
             time.sleep(1)
             waiting_time -= 1
-        # logging.info("Thread %s: finishing", name)
 

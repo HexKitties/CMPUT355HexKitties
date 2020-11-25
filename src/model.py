@@ -31,6 +31,12 @@ class HexModel():
         self.setup()
 
     def setup(self):
+        '''
+        This function will calculate the set of coordinates eg. (0, 0) for the boundaries,
+        which are the top and bottom rows, rightmost and leftmost columns. It will also
+        setup a dictionary that stores all the neighboring coordinates. Both of these
+        attributes are helpful for checking winning state and looking for winning path.
+        '''
         self.BTM_ROW = set()
         for x in range(self.size[1]):
             self.BTM_ROW.add((self.size[1] - 1, x))
@@ -68,6 +74,14 @@ class HexModel():
         pass
 
     def init_board(self):
+        '''
+        This function will create the corresponding hex board using the size attirbute
+        of the class object. The board is initiated with -1 for all positions in the
+        board. Note that -1 represents empty position, 0 and 1 represent the first or
+        second player's chess on that position.
+
+        return empty_brd: a 2D list with all position initiated as value -1
+        '''
         empty_brd = []
         for i in range(self.size[0]):
             temp = []
@@ -77,6 +91,11 @@ class HexModel():
         return empty_brd
 
     def get_current_mode(self):
+        '''
+        This function returns the current playing mode (REAL PLAYER or AI PLAYER).
+
+        return self.current_mode: either 0 (REAL PLAYER) or 1 (AI PLAYER)
+        '''
         return self.current_mode
 
     def move(self):
@@ -87,7 +106,15 @@ class HexModel():
         self.place_chess(next_move)
 
     def place_chess(self, chess_pos):
-        if self.board[chess_pos[0]][chess_pos[1]] == -1:
+        '''
+        This function will take the chess_pos as argument and add it in to the current
+        chess board board. If the position of the new chess is empty, then it will be
+        added successfully and return True where the chess position will be added into the history for
+        undo functionality. Otherwise, chess will not be added and it will return False.
+
+        return True or False
+        '''
+        if self.board[chess_pos[0]][chess_pos[1]] == -1:  # chess position is empty
             self.board[chess_pos[0]][chess_pos[1]] = self.player_turn
 
             self.player_turn = (self.player_turn + 1) % 2
@@ -104,6 +131,10 @@ class HexModel():
         return ''.join([str(elem) for elem in self.board])
 
     def new_game(self):
+        '''
+        This function will create a new game, or reset the attributes of the hex board,
+        for example clearing the board, history, winning path, and setup the other settings.
+        '''
         self.board = self.init_board()
         self.setup()
         self.clear_win_path()
@@ -112,9 +143,23 @@ class HexModel():
         self.player_turn = 0
 
     def switch_mode(self):
+        '''
+        This function will change the mode:
+        REAL PLAYER --> AI PLAYER
+        or
+        AI PLAYER ---> REAL PLAYER
+        '''
         self.current_mode = (self.current_mode + 1) % 2
 
     def undo(self):
+        '''
+        This function will delete the last chess placed on the board if the current
+        mode is REAL PLAYER mode, or, it will delete the last two chess placed on the
+        board so that the last chess placed by the user and the program are both removed
+        from the history list.
+
+        return True if successfully undo. False if failed.
+        '''
         if self.current_mode == 0:  # real player mode
             if len(self.history) > 0:
                 last_pos = self.history.pop()
@@ -133,6 +178,11 @@ class HexModel():
         return False
 
     def notify_update(self, mouse_pos, text):
+        '''
+        This function will update the screen by passing all the required values
+        to the view as parameter. By calling this function, the view will show the latest
+        board, buttons, or messages.
+        '''
         globvar.hex_view.display(self.radius, self.size, self.default_color, self.board, mouse_pos, text)
 
     def legal_moves(self, board):
@@ -144,6 +194,11 @@ class HexModel():
         return temp
 
     def current_player(self):
+        '''
+        This function return the turn of current player:
+        return 0 (first player: red by default)
+               1 (second player: blue by default)
+        '''
         return self.player_turn
 
     def last_player(self, board):  # the player that last moved, assume 0 moves first
@@ -204,12 +259,12 @@ class HexModel():
         last_one = None
         find = False
         Parent = dict()
+        seen = set()
         while not find:
             Q = deque([])
-            seen = set()
             Parent = dict()
             for i in set1:
-                if board[i[0]][i[1]] == winner:
+                if board[i[0]][i[1]] == winner and i not in seen:
                     Q.append(i)
                     seen.add(i)
                     Parent[i] = i
@@ -248,16 +303,20 @@ class HexModel():
 
 
     def dump_Monte_Carlo_obj(self):
-        MonteCarlo_out = open("data\\dict.MonteCarlo%s" %(self.size,), "wb")
+        cur_path = os.path.dirname(__file__)
+        path = os.path.relpath('../data/MonteCarlo%s'%(self.size,), cur_path)
+        MonteCarlo_out = open(path, "wb")
         pickle.dump(self.monte_carlo.plays, MonteCarlo_out)
         pickle.dump(self.monte_carlo.wins, MonteCarlo_out)
         MonteCarlo_out.close()
 
     def load_Monte_Carlo_Obj(self):
+        cur_path = os.path.dirname(__file__)
+        path = os.path.relpath('../data/MonteCarlo%s'%(self.size,), cur_path)
         try:
-            MonteCarlo_in = open("data\\dict.MonteCarlo%s" %(self.size,), "rb+")
+            MonteCarlo_in = open(path, "rb+")
             self.monte_carlo.plays = pickle.load(MonteCarlo_in)
             self.monte_carlo.wins = pickle.load(MonteCarlo_in)
         except:
-            f = open("dict.MonteCarlo", "w+")
+            f = open(path, "w+")
             f.close()
