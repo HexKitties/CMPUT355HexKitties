@@ -7,6 +7,9 @@ class HexView():
     def __init__(self, screen, bgr_color, start_pos = (120, 120)):
         # setup attributes of the display
         self.screen = screen
+        # set the pygame window name 
+        pygame.display.set_caption('hex game') 
+
         self.bgr_color = bgr_color
         self.start_pos = start_pos
         self.size = screen.get_size()
