@@ -46,9 +46,16 @@ class MonteCarlo():
         return precent_wins, move
 
     def get_percentage(self, chess_pos, player):
+        '''
+        This function will look for the percentage of winning from the two attributes: number of plays and
+        number of wins, using the given chess pos, current chess board and player.
+
+        return the percentage of winning or
+               0 if the corresponding state is not yet explored by the program
+        '''
         blanks = self.board.legal_moves(self.board.board)
-        if self.activate:
-            self.run_simulation()
+        # if self.activate:
+        #     self.run_simulation()
         # All possible next move
         next_states = []
         for x in blanks:
