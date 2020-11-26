@@ -45,7 +45,6 @@ Make a change in your file and instantaneously see your updates!
 
 Go to src directory, then open your favourite Terminal and run these commands.
 
-First Tab:
 ```sh
 $ python3 main.py
 ```
@@ -56,6 +55,12 @@ $ python3 main.py
  - Write MORE Tests
  - Faster solver
 ### Performance
+
+Go to src directory, then open your favourite Terminal and run these commands.
+
+```sh
+$ python3 performance_test.py
+```
 
 ![Figure_1](https://user-images.githubusercontent.com/36469528/100310465-889d9680-2f6a-11eb-92ee-07adc4215601.png)
 
