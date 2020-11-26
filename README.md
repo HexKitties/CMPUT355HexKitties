@@ -59,6 +59,8 @@ $ python3 main.py
  - Faster solver
 ### Performance
 
+![Figure_1](https://user-images.githubusercontent.com/36469528/100310465-889d9680-2f6a-11eb-92ee-07adc4215601.png)
+
 License
 ----
 
