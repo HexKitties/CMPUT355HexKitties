@@ -17,6 +17,7 @@ class MonteCarlo():
         self.plays = {}
         self.wins = {}
         self.parameter = 1.7
+        self.activate = False
         random.seed(time.time())
 
     # Get next move for the AI
@@ -44,6 +45,20 @@ class MonteCarlo():
         print("winning prob: ", precent_wins)
         return precent_wins, move
 
+    def get_percentage(self, chess_pos, player):
+        blanks = self.board.legal_moves(self.board.board)
+        if self.activate:
+            self.run_simulation()
+        # All possible next move
+        next_states = []
+        for x in blanks:
+            if x == chess_pos:
+                state_temp = copy.deepcopy(self.board.board)
+                s = self.board.place_chess2(x, state_temp)
+                return self.wins.get((player, self.list_to_str(s)), 0) / self.plays.get((player, self.list_to_str(s)), 1)
+        return -1
+
+
     # Random play simulation
     def run_simulation(self):
         plays = self.plays
@@ -66,11 +81,11 @@ class MonteCarlo():
             # print(next_states[0])
 
             # If all moves have been expanded, choose a move currently has the highest win rate
-            if all(plays.get((player, self.list_to_str(s))) for _, s in next_states):
-                log_num_simulation = log(sum(plays[(player, self.list_to_str(s))] for _, s in next_states))
+            if all(self.plays.get((player, self.list_to_str(s))) for _, s in next_states):
+                log_num_simulation = log(sum(self.plays[(player, self.list_to_str(s))] for _, s in next_states))
                 value, move, state = max(
-                    ((wins[(player, self.list_to_str(s))] / plays[(player, self.list_to_str(s))]) +
-                     self.parameter * sqrt(log_num_simulation / plays[(player, self.list_to_str(s))]), p, s)
+                    ((self.wins[(player, self.list_to_str(s))] / self.plays[(player, self.list_to_str(s))]) +
+                     self.parameter * sqrt(log_num_simulation / self.plays[(player, self.list_to_str(s))]), p, s)
                     for p, s in next_states
                 )
                 # print('value:', value, 'move:', move, 'state:', state)

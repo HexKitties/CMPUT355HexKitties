@@ -11,10 +11,11 @@ class HexView():
         self.start_pos = start_pos
         self.size = screen.get_size()
         # setup button's size and location
-        self.newgame_button = pygame.Rect(self.size[0] * 1 / 6, self.size[1] * 4 / 5, 150, 50)
-        self.playermode_button = pygame.Rect(self.size[0] * 2 / 6, self.size[1] * 4 / 5, 150, 50)
-        self.undo_button = pygame.Rect(self.size[0] * 3 / 6, self.size[1] * 4 / 5, 150, 50)
-        self.menu_button = pygame.Rect(self.size[0] * 4 / 6, self.size[1] * 4 / 5, 150, 50)
+        self.newgame_button = pygame.Rect(self.size[0] * 1 / 7, self.size[1] * 4 / 5, 130, 50)
+        self.playermode_button = pygame.Rect(self.size[0] * 2 / 7, self.size[1] * 4 / 5, 130, 50)
+        self.show_button = pygame.Rect(self.size[0] * 3 / 7, self.size[1] * 4 / 5, 130, 50)
+        self.undo_button = pygame.Rect(self.size[0] * 4 / 7, self.size[1] * 4 / 5, 130, 50)
+        self.menu_button = pygame.Rect(self.size[0] * 5 / 7, self.size[1] * 4 / 5, 130, 50)
 
     def draw_ngon(self, radius, color, n, position):
         '''
@@ -63,6 +64,7 @@ class HexView():
         self.draw_button(mouse_pos, self.newgame_button, "newgame")
         self.draw_button(mouse_pos, self.menu_button, "menu")
         self.draw_button(mouse_pos, self.playermode_button, globvar.hex_brd.modes[globvar.hex_brd.current_mode])
+        self.draw_button(mouse_pos, self.show_button, "WIN %: " + globvar.hex_brd.show_states[globvar.hex_brd.current_show])
         self.draw_button(mouse_pos, self.undo_button, "undo")
 
     def draw_button(self, mouse_pos, button, text):
@@ -93,6 +95,15 @@ class HexView():
         return True if the mouse is in the circle False if the mouse is not in the circle
         '''
         return (mouse_pos[0]-center_pos[0])**2 + (mouse_pos[1] - center_pos[1])**2 < (radius * 0.8)**2
+
+    def show_percent(self, percent, center):
+        smallText = pygame.font.SysFont("comicsansms", 20)
+        p_prime = 1 - percent
+        color = (255 * p_prime, 255 * p_prime, 255 * p_prime)
+        text = smallText.render(str(round(percent, 2)), True, color)
+        textRect = text.get_rect()
+        textRect.center = center
+        self.screen.blit(text, textRect)
 
     def display(self, radius, size, default_color, chess_pos, mouse_pos, text):
         '''
@@ -132,6 +143,14 @@ class HexView():
                     if  len(current_win_path) > 0 and (i,j) == current_win_path[0]:
                         self.draw_wining_circle(radius, temp_pos, True )
                         current_win_path.pop(0)
+                else:
+                    # # # # # # # # # #
+                    if globvar.hex_ctrl.show_win_p:
+                        MC = globvar.hex_brd.monte_carlo
+                        player = globvar.hex_brd.current_player()
+                        winning_percent = MC.get_percentage((i, j), player)
+                        self.show_percent(winning_percent, temp_pos)
+                    # # # # # # # # # #
                 if self.check_mouse(radius, mouse_pos, temp_pos):
                     in_brd = True
                     if chess_pos[i][j] == -1:

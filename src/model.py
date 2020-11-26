@@ -20,7 +20,9 @@ class HexModel():
         self.board = self.init_board()
         self.history = []
         self.modes = {0: "REAL PLAYER", 1: "AI PLAYER"}
+        self.show_states = {0: "OFF", 1: "ON"}
         self.current_mode = mode
+        self.current_show = 0
         self.waiting_time = waiting_time
         self.win_path = []
         self.load = load
@@ -265,7 +267,6 @@ class HexModel():
         This function will receive board position and winner(represent by number) to find a winning PATH ,return a
         list of array containing a winning path
         '''
-        print(self.board)
         if winner == 0:
             set1 = copy.deepcopy(deque(self.TOP_ROW))
             set2 = self.BTM_ROW
