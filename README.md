@@ -6,11 +6,10 @@
 
 We are team "HexKitties," HexKitties is our first group project using the agile development method.
 
-
-HexKitties is an offline-storage, AI-based learning, python-based local hex game, 
+HexKitties is an offline-storage, AI-based learning, python-based local hex game, which combing AI player , visualizer, tutor functionality.
 
   - You can play with your friend
-  - Train hex AI and play versus our AI player trained using MCTS
+  - Train hex AI and play versus our AI player trained using monte carlo tree search, virtual connection algorithm in hex, UCT (Upper Confidence bounds applied to Trees
   - able to export and reuse prepared files 
   - implement using Python with UI in Pygame
 
@@ -28,11 +27,9 @@ http://www.mseymour.ca/hex_book/hexstrat.html
 ### Logo photo
 HexKitties' cute photo, drew Yuko Shimizu, used for our non-business purpose project.
 
-### Installation
+### Runing instruction
 
 Go to src dicrectory, then open your favorite Terminal and run these commands, require package python3, pygame
-
-First Tab:
 ```sh
 $ python3 main.py
 ```
@@ -48,19 +45,24 @@ Make a change in your file and instantaneously see your updates!
 
 Go to src directory, then open your favourite Terminal and run these commands.
 
-First Tab:
 ```sh
 $ python3 main.py
 ```
-
-
-
 
 
 ### Todos
 
  - Write MORE Tests
  - Faster solver
+### Performance
+
+Go to src directory, then open your favourite Terminal and run these commands.
+
+```sh
+$ python3 performance_test.py
+```
+
+![Figure_1](https://user-images.githubusercontent.com/36469528/100310465-889d9680-2f6a-11eb-92ee-07adc4215601.png)
 
 License
 ----
