@@ -61,10 +61,10 @@ Go to src directory, then open your favourite Terminal and run these commands.
 ```sh
 $ python3 performance_test.py
 ```
-Figure for 1 sec thinking time AI player VS random player (play randomly), average from 100 5x5 hex games, Winning percent:  0.97
+Figure for 1 sec thinking time AI player VS random player (play randomly), average from 100 5x5 hex games, Winning probability:  0.97
 ![randomvsmc](https://user-images.githubusercontent.com/36469528/100316867-978b4580-2f78-11eb-875e-b060fca6635f.png)
 
-Figure for 10 sec thinking time AI player VS random player (play randomly), average from 10 6x6 hex games, Winning percent:  1.0
+Figure for 10 sec thinking time AI player VS random player (play randomly), average from 10 6x6 hex games, Winning probability:  1.0
 ![randomvsmc6](https://user-images.githubusercontent.com/36469528/100319551-09658e00-2f7d-11eb-8c32-be336cd17301.png)
 
 ![Figure_1](https://user-images.githubusercontent.com/36469528/100310465-889d9680-2f6a-11eb-92ee-07adc4215601.png)
