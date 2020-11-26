@@ -27,11 +27,9 @@ http://www.mseymour.ca/hex_book/hexstrat.html
 ### Logo photo
 HexKitties' cute photo, drew Yuko Shimizu, used for our non-business purpose project.
 
-### Installation
+### Runing instruction
 
 Go to src dicrectory, then open your favorite Terminal and run these commands, require package python3, pygame
-
-First Tab:
 ```sh
 $ python3 main.py
 ```
