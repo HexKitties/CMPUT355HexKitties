@@ -7,11 +7,11 @@ import copy
 
 
 class MonteCarlo():
-    def __init__(self, board):
+    def __init__(self, board, plays, wins):
         self.board: model.HexModel = board
         self.states = []
-        self.plays = {}
-        self.wins = {}
+        self.plays = plays
+        self.wins = wins
         self.parameter = 1.7
         random.seed(time.time())
 
