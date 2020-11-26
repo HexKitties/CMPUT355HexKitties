@@ -69,6 +69,8 @@ Figure for 10 sec thinking time AI player VS random player (play randomly), aver
 
 ![randomvsmc6](https://user-images.githubusercontent.com/36469528/100319551-09658e00-2f7d-11eb-8c32-be336cd17301.png)
 
+Figure for 10 sec thinking time AI player VS 10 sec thinking time AI player , average from 10 5x5 hex games
+
 ![Figure_1](https://user-images.githubusercontent.com/36469528/100310465-889d9680-2f6a-11eb-92ee-07adc4215601.png)
 
 License
