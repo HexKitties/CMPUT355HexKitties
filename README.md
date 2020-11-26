@@ -53,13 +53,11 @@ $ python3 main.py
 ```
 
 
-
-
-
 ### Todos
 
  - Write MORE Tests
  - Faster solver
+### Performance
 
 License
 ----
