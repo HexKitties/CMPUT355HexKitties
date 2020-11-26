@@ -10,7 +10,7 @@ We are team "HexKitties," HexKitties is our first group project using the agile 
 HexKitties is an offline-storage, AI-based learning, python-based local hex game, 
 
   - You can play with your friend
-  - Train hex AI and play versus our AI player trained using MCTS
+  - Train hex AI and play versus our AI player trained using monte carlo tree search, virtual connection algorithm in hex, UCT (Upper Confidence bounds applied to Trees
   - able to export and reuse prepared files 
   - implement using Python with UI in Pygame
 
