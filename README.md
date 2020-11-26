@@ -61,6 +61,8 @@ Go to src directory, then open your favourite Terminal and run these commands.
 ```sh
 $ python3 performance_test.py
 ```
+Figure for AI player VS random player (play randomly), average from 100 games, Winning percent:  0.97
+![randomvsmc](https://user-images.githubusercontent.com/36469528/100316867-978b4580-2f78-11eb-875e-b060fca6635f.png)
 
 ![Figure_1](https://user-images.githubusercontent.com/36469528/100310465-889d9680-2f6a-11eb-92ee-07adc4215601.png)
 
