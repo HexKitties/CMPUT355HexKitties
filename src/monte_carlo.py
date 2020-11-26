@@ -54,8 +54,8 @@ class MonteCarlo():
                0 if the corresponding state is not yet explored by the program
         '''
         blanks = self.board.legal_moves(self.board.board)
-        # if self.activate:
-        #     self.run_simulation()
+        if self.activate:
+            self.run_simulation()
         # All possible next move
         next_states = []
         for x in blanks:
